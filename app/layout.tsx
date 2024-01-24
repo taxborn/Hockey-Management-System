@@ -1,10 +1,6 @@
-import type { Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
-
-export const metadata: Metadata = {
-  title: 'HMS',
-  description: 'Hockey Management System',
-}
+import Navbar from './_components/Navbar'
 
 export default function RootLayout({
   children,
@@ -12,8 +8,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <head>
+          <title>Goal Guardian</title>
+          {/* TODO: Generate an actual description */}
+          <meta name="description" content="Goal Guardian is a hockey team management system" />
+        </head>
+        <body>
+          <Navbar />
+
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
