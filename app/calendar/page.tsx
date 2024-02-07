@@ -1,45 +1,37 @@
+"use client";
+
 import React from 'react';
-import { useMemo } from 'react';
-import moment from 'moment';
-import {
-    Calendar,
-    Views,
-    DateLocalizer,
-    momentLocalizer,
-    Components,
-} from 'react-big-calendar';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { EventContentArg } from '@fullcalendar/core/index.js';
 
-const mLocalizer = momentLocalizer(moment);
+const events = [
+    { title: 'event 1', date: '2024-02-07', end: '2024-02-09', editable: true, startEditable: true, endEditable: true },
+    { title: 'event 2', date: new Date(), editable: true  },
+]
 
-const ColoredDateCellWrapper = ({ children }: Components<Event, object>) =>
-    React.cloneElement(React.Children.only(children), {
-        style: {
-            backgroundColor: 'lightblue',
-        },
-    })
-
-export default function Page({localizer = mLocalizer}) {
-    const { components, defaultDate, max } = useMemo(() => ({
-        components: {
-            timeSlotWrapper: ColoredDateCellWrapper
-        },
-        defaultDate: new Date(),
-        max: new Date()
-    }), [])
-
+export default function Page() {
     return (
         <main className="container mx-auto h-screen py-8">
             <h1 className="text-2xl font-bold">Team Calendar</h1>
-            <Calendar
-                components={components}
-                defaultDate={defaultDate}
-                events={undefined}
-                localizer={localizer} 
-                max={max}
-                showMultiDayTimes
-                step={60}
-                views={undefined}
+
+            <FullCalendar
+                plugins={[dayGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                editable={true}
+                events={events}
+                eventContent={renderEventContent}
             />
         </main>
+    )
+}
+
+function renderEventContent(eventInfo: EventContentArg) {
+    return (
+        <>
+            <b className='mr-2'>{eventInfo.timeText}</b>
+            <i className='font-bold'>{eventInfo.event.title}</i>
+        </>
     )
 }
