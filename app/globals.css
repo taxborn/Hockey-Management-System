@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cl-signIn-root {
+    @apply mx-auto mt-8;
+}
+
+.cl-signUp-root {
+    @apply mx-auto mt-8;
+}
+
+a {
+    @apply font-semibold hover:underline underline-offset-4;
+}
