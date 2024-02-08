@@ -1,11 +1,11 @@
-import { ClerkProvider } from '@clerk/nextjs'
-import Navbar from './_components/Navbar'
-import './globals.css'
+import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "./_components/Navbar";
+import "./globals.css";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <ClerkProvider>
@@ -13,16 +13,17 @@ export default function RootLayout({
         <head>
           <title>Goal Guardian</title>
           {/* TODO: Generate an actual description */}
-          <meta name="description" content="Goal Guardian is a hockey team management system" />
+          <meta
+            name="description"
+            content="Goal Guardian is a hockey team management system"
+          />
         </head>
         <body>
           <Navbar />
 
-          <div className="container mx-auto mt-8 h-screen">
-            {children}
-          </div>
+          <div className="container mx-auto mt-8 h-screen">{children}</div>
         </body>
       </html>
     </ClerkProvider>
-  )
+  );
 }
