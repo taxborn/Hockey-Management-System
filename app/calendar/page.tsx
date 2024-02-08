@@ -7,12 +7,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { EventContentArg, EventInput } from '@fullcalendar/core/index.js';
 
 const events: EventInput[] = [
-    { title: 'vs. Ohio State', date: new Date("2024-02-09 18:00:00"), extendedProps: {"homeGame": true} },
-    { title: 'vs. Ohio State', date: new Date("2024-02-10 14:00:00"), extendedProps: {"homeGame": true} },
-    { title: 'vs. Bemidji', date: new Date("2024-02-16 18:00:00"), extendedProps: {"homeGame": true} },
-    { title: 'vs. Bemidji', date: new Date("2024-02-17 15:00:00"), extendedProps: {"homeGame": true} },
-    { title: 'vs. St. Thomas', date: new Date("2024-02-23 15:00:00"), extendedProps: {"homeGame": true} },
-    { title: 'at St. Thomas', date: new Date("2024-02-24 14:00:00"), extendedProps: {"homeGame": false} },
+    { title: 'vs. Ohio State', date: new Date("2024-02-09 18:00:00"), extendedProps: { "homeGame": true } },
+    { title: 'vs. Ohio State', date: new Date("2024-02-10 14:00:00"), extendedProps: { "homeGame": true } },
+    { title: 'vs. Bemidji', date: new Date("2024-02-16 18:00:00"), extendedProps: { "homeGame": true } },
+    { title: 'vs. Bemidji', date: new Date("2024-02-17 15:00:00"), extendedProps: { "homeGame": true } },
+    { title: 'vs. St. Thomas', date: new Date("2024-02-23 15:00:00"), extendedProps: { "homeGame": true } },
+    { title: 'at St. Thomas', date: new Date("2024-02-24 14:00:00"), extendedProps: { "homeGame": false } },
 ]
 
 export default function Page() {
