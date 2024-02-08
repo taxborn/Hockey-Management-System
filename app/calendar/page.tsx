@@ -7,13 +7,13 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { EventContentArg } from '@fullcalendar/core/index.js';
 
 const events = [
-    { title: 'event 1', date: '2024-02-07', end: '2024-02-09', editable: true, startEditable: true, endEditable: true },
-    { title: 'event 2', date: new Date(), editable: true  },
+    { title: 'event 1', date: '2024-02-07', end: '2024-02-09' },
+    { title: 'event 2', date: new Date() },
 ]
 
 export default function Page() {
     return (
-        <main className="container mx-auto h-screen py-8">
+        <>
             <h1 className="text-2xl font-bold">Team Calendar</h1>
 
             <FullCalendar
@@ -23,7 +23,7 @@ export default function Page() {
                 events={events}
                 eventContent={renderEventContent}
             />
-        </main>
+        </>
     )
 }
 

@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs'
-import './globals.css'
 import Navbar from './_components/Navbar'
+import './globals.css'
 
 export default function RootLayout({
   children,
@@ -18,7 +18,9 @@ export default function RootLayout({
         <body>
           <Navbar />
 
-          {children}
+          <div className="container mx-auto mt-8 h-screen">
+            {children}
+          </div>
         </body>
       </html>
     </ClerkProvider>
