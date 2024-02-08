@@ -56,7 +56,7 @@ export default function Page() {
 }
 
 function renderEventContent(eventInfo: EventContentArg) {
-  const isHome = eventInfo.event.extendedProps.homeGame;
+  const isHome = eventInfo.event.extendedProps["homeGame"];
 
   return (
     <div className={isHome ? "bg-indigo-200" : "bg-amber-200"}>
