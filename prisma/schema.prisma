@@ -1,0 +1,17 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// TODO: Add isHomeGame
+// TODO: List of Clerk User ID's for invited users
+model Event {
+  id    Int      @id @default(autoincrement())
+  title String
+  date  DateTime @default(now())
+}
