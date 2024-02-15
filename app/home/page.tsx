@@ -9,7 +9,6 @@ export default async function Home() {
       <a href="/calendar" className="font-semibold underline text-indigo-500">
         calendar
       </a>
-      <a> </a>
       <a href="/whiteboard" className="font-semibold underline text-indigo-500">  
         whiteboard 
       </a>
