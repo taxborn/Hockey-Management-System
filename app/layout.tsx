@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "./_components/Navbar";
 import "./globals.css";
+import {inter} from '@/app/_components/fonts';
 
 export default function RootLayout({
   children,
@@ -18,7 +19,7 @@ export default function RootLayout({
             content="Goal Guardian is a hockey team management system"
           />
         </head>
-        <body>
+        <body className={`${inter.className} antialiased`}>
           <Navbar />
 
           <div className="container mx-auto mt-8 h-screen">{children}</div>

@@ -13,7 +13,7 @@ export default function Navbar() {
           href={userId ? "/home" : "/"}
           className="text-xl font-bold tracking-tight"
         >
-          Goal Guardian
+          MSU Womens Hockey Team
         </a>
 
         {/* TODO: Replace the given <UserButton> Clerk button with something more light-weight */}
