@@ -2,8 +2,9 @@
 import {
     CalendarIcon,
     HomeIcon,
-    TvIcon,
-    Bars2Icon
+    Bars2Icon,
+    ClipboardIcon,
+    ChatBubbleBottomCenterTextIcon
   } from '@heroicons/react/24/outline';
   
 
@@ -14,8 +15,10 @@ import {
       href: '/home/calendar',
       icon: CalendarIcon,
     },
-    { name: 'WhiteBoard', href: '/home/whiteboard', icon: TvIcon },
-    { name: 'Plan Ensuring', href: '/home', icon: Bars2Icon },
+    { name: 'WhiteBoard', href: '/home/whiteboard', icon: ClipboardIcon },
+    { name: 'Messaging', href: '/home/Message', icon: ChatBubbleBottomCenterTextIcon },
+    { name: 'Planing Tool', href: '/home/Planning', icon: Bars2Icon },
+   
   ];
   
   export default function NavLinks() {
