@@ -2,6 +2,10 @@
 
 tbd.
 
+#### Tech used
+
+See [USES.md](./USES.md)
+
 ## Getting Started
 
 First, you will need credentials from [clerk.com](https://clerk.com), the `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
@@ -21,6 +25,12 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Deployment
+
+Currently, we use [Vercel](https://vercel.com) to deploy.
+
+If you want to host it on an alternative platform, it is a bit more difficult. There is work on [sst.dev](https://sst.dev/) and [OpenNext](https://open-next.js.org/). You are _technically_ able to host it anywhere, but you lose out on some benefits of serverless functions, server-side rendering, etc. We should do more analysis on exactly what can and cannot be done with this application in this regard if a user does not want to deploy to Vercel.
 
 ## Design decisions
 
