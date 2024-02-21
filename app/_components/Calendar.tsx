@@ -21,6 +21,7 @@ export default function Calendar({ events }: any) {
 }
 
 function renderEventContent(eventInfo: EventContentArg) {
+  // Currently always returns false
   const isHome = eventInfo.event.extendedProps["homeGame"];
 
   return (
