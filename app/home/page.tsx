@@ -9,6 +9,9 @@ export default async function Home() {
       <a href="/calendar" className="font-semibold underline text-indigo-500">
         calendar
       </a>
+      <a href="/whiteboard" className="font-semibold underline text-indigo-500">  
+        whiteboard 
+      </a>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nulla et
         cum adipisci. Quasi expedita dolore blanditiis molestias excepturi
