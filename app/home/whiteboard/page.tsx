@@ -7,7 +7,7 @@ import "./index.css";
 export default function app() {
   return (
     <> 
-      <div className="">
+      <div className="h-full">
         <Tldraw />
       </div>
     </>
