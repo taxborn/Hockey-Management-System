@@ -13,14 +13,13 @@ import {
   const links = [
     { name: 'Home', href: '/home', icon: HomeIcon },
     {
-      name: 'Calender',
+      name: 'Calendar',
       href: '/home/calendar',
       icon: CalendarIcon,
     },
-    { name: 'WhiteBoard', href: '/home/whiteboard', icon: ClipboardIcon },
-    { name: 'Messaging', href: '/home/Message', icon: ChatBubbleBottomCenterTextIcon },
-    { name: 'Planing Tool', href: '/home/Planning', icon: Bars2Icon },
-   
+    { name: 'Whiteboard', href: '/home/whiteboard', icon: ClipboardIcon },
+    { name: 'Messaging', href: '/home/message', icon: ChatBubbleBottomCenterTextIcon },
+    { name: 'Planning Tool', href: '/home/planning', icon: Bars2Icon },
   ];
   
   export default function NavLinks() {
