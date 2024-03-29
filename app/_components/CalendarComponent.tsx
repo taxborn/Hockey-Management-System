@@ -14,9 +14,22 @@ interface Props {
 
 export default function CalendarComponent({ events }: Props) {
   useEffect(() => {
-    // Create a modal object
-    const modalEl: HTMLElement | null = document.querySelector('#authentication-modal');
-    const modal = new Modal(modalEl);
+    const buttonEl: HTMLElement | null = document.querySelector('#modal-button');
+
+    const handleClick = () => {
+      const closeEl: HTMLElement | null = document.querySelector('[data-modal-hide="authentication-modal"]');
+      const modalEl: HTMLElement | null = document.querySelector('#authentication-modal');
+      const modal = new Modal(modalEl);
+      modal.show();
+
+      closeEl?.addEventListener('click', () => { modal.hide(); });
+    };
+
+    buttonEl?.addEventListener('click', handleClick);
+
+    return () => {
+      buttonEl?.removeEventListener('click', handleClick);
+    }
   }, []);
 
   return (

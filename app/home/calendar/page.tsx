@@ -15,8 +15,8 @@ const libsql = createClient({
 const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
-
 export default async function Page() {
+  // When the page loads, we fetch all events from the database
   const events = await prisma.event.findMany();
   // Coerce the Prisma Event objects into FullCalendar EventInput objects
   const calendarEvents: EventInput[] = events.map((event) => {
