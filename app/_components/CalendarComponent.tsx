@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { EventContentArg, EventInput } from "@fullcalendar/core/index.js";
+import { EventClickArg, EventContentArg, EventInput } from "@fullcalendar/core/index.js";
 
 interface Props {
   events: EventInput[];
@@ -40,6 +40,17 @@ export default function CalendarComponent({ events }: Props) {
       buttonEl?.removeEventListener('click', handleClick);
     }
   }, []);
+
+  // TODO: When a user clicks a date, we should create a new event
+  const handleDateClick = (arg: DateClickArg) => { 
+    console.log(arg);
+  };
+
+  // TODO: When a user clicks an event, we should show a modal with more information
+  // about the event, and allow them to edit it
+  const handleEventClick = (arg: EventClickArg) => { 
+    console.log(arg);
+  };
 
   return (
     <>
@@ -102,7 +113,8 @@ export default function CalendarComponent({ events }: Props) {
         editable={true}
         events={events}
         eventContent={renderEventContent}
-        dateClick={handleEventClick}
+        dateClick={handleDateClick}
+        eventClick={handleEventClick}
       />
     </>
   );
@@ -117,8 +129,4 @@ function renderEventContent(eventInfo: EventContentArg) {
       <p className="inline-block">{eventInfo.event.title}</p>
     </div>
   );
-}
-
-function handleEventClick(eventInfo: DateClickArg) {
-  console.log(eventInfo.dateStr);
 }

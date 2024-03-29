@@ -32,6 +32,8 @@ export async function create_event(formData: FormData) {
             description,
             location,
             start_date: new Date(start),
+            // If we have an end date, we know this isn't an all-day event
+            // Otherwise, this is a single-day event and we set end_date to null
             end_date: end ? new Date(end) : null,
             color: "blue",
             organizerId,
