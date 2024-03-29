@@ -15,6 +15,7 @@ const libsql = createClient({
 const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
+
 export default async function Page() {
   const events = await prisma.event.findMany();
   // Coerce the Prisma Event objects into FullCalendar EventInput objects
@@ -31,6 +32,7 @@ export default async function Page() {
       };
     }
 
+    // Otherwise, this is a single-day event
     return {
       title: event.name,
       date: event.start_date,
@@ -41,9 +43,13 @@ export default async function Page() {
     };
   });
 
+
   return (
+    // When the user clicks the "Create Event" button, we show the authentication modal
+
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
+
 
       <CalendarComponent events={calendarEvents} />
     </>
