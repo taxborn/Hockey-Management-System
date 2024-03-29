@@ -1,9 +1,10 @@
 import React from "react";
+import { currentUser } from "@clerk/nextjs";
 
 import CalendarComponent from "@/app/_components/CalendarComponent";
 import { EventInput } from "@fullcalendar/core/index.js";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 
@@ -16,6 +17,12 @@ const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
 export default async function Page() {
+  const user = await currentUser();
+  const dbUser = await prisma.user.findFirst({
+    where: { clerkId: user?.id },
+  });
+  const role: Role | null = await prisma.role.findFirst({ where: { id: dbUser?.roleId } });
+
   // When the page loads, we fetch all events from the database
   const events = await prisma.event.findMany();
   // Coerce the Prisma Event objects into FullCalendar EventInput objects
@@ -47,7 +54,7 @@ export default async function Page() {
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <CalendarComponent events={calendarEvents} />
+      <CalendarComponent events={calendarEvents} role={role.name} />
     </>
   );
 }
