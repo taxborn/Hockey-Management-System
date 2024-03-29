@@ -10,6 +10,6 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [require('flowbite/plugin')],
+  plugins: [require("flowbite/plugin")],
 };
 export default config;
