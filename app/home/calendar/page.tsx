@@ -1,11 +1,11 @@
 import React from "react";
 
+import CalendarComponent from "@/app/_components/CalendarComponent";
+import { EventInput } from "@fullcalendar/core/index.js";
+
 import { PrismaClient } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
-
-import CalendarComponent from "@/app/_components/CalendarComponent";
-import { EventInput } from "@fullcalendar/core/index.js";
 
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
@@ -45,11 +45,8 @@ export default async function Page() {
 
 
   return (
-    // When the user clicks the "Create Event" button, we show the authentication modal
-
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
-
 
       <CalendarComponent events={calendarEvents} />
     </>
