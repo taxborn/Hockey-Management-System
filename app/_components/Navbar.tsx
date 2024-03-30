@@ -9,7 +9,7 @@ export default function Navbar() {
   const { userId } = useAuth();
 
   return (
-    <nav className="p-2 bg-purple-900 w-full">
+    <nav className="p-4 bg-purple-900 w-full">
       <div className="flex justify-between max-w-screen-xl mx-auto ">
       <Link href="/home">
              
@@ -17,7 +17,7 @@ export default function Navbar() {
                src="/logo/MAV1_3C-OnDark.png"
                alt="MSU logo"
                width={100} 
-               height={100}
+               height={50}
                 
              /> 
          </Link>
