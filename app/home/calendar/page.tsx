@@ -54,7 +54,7 @@ export default async function Page() {
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <CalendarComponent events={calendarEvents} role={role.name} />
+      <CalendarComponent events={calendarEvents} role={role?.name || "Player"} />
     </>
   );
 }
