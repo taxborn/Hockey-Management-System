@@ -1,8 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
 import { create_event as create_calendar_event } from "@/app/api/create-event";
 import { Modal } from "flowbite";
 
 export default function EventModal() {
+  const router = useRouter();
+
   useEffect(() => {
     const buttonEl = document.querySelector("#modal-button") as HTMLElement;
 
@@ -28,8 +33,8 @@ export default function EventModal() {
         create_calendar_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
+        router.push('/home/calendar');
         modal.hide();
-        // TODO: Refresh the calendar
       });
     };
 

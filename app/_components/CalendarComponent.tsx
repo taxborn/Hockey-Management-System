@@ -1,6 +1,7 @@
 "use client";
 
 import { Modal } from "flowbite";
+import { useRouter } from 'next/navigation';
 import React from "react";
 import { create_event as create_calendar_event } from "@/app/api/create-event";
 import FullCalendar from "@fullcalendar/react";
@@ -19,6 +20,8 @@ interface Props {
 }
 
 export default function CalendarComponent({ events, role }: Props) {
+  const router = useRouter();
+
   // TODO: Check for date creation permissions
   const handleDateClick = (arg: DateClickArg) => {
     const modalEl = document.querySelector(
@@ -44,8 +47,9 @@ export default function CalendarComponent({ events, role }: Props) {
         new FormData(modalEl!.querySelector("form") as HTMLFormElement),
       );
 
+      router.push('/home/calendar');
+
       modal.hide();
-      // TODO: Refresh the calendar
     });
   };
 
@@ -76,11 +80,11 @@ export default function CalendarComponent({ events, role }: Props) {
 function renderEventContent(eventInfo: EventContentArg) {
   const color = eventInfo.event.extendedProps.color;
   const colorMap: { [key: string]: string } = {
-    "blue": "bg-blue-200",
-    "red": "bg-red-200",
-    "green": "bg-green-200",
-    "purple": "bg-purple-200",
-    "yellow": "bg-amber-200",
+    "blue": "bg-blue-200 border border-blue-500",
+    "red": "bg-red-200 border border-red-500",
+    "green": "bg-green-200 border border-green-500",
+    "purple": "bg-purple-300 border border-purple-800",
+    "yellow": "bg-amber-200 border border-amber-500",
   };
   const colorClass = colorMap[color] || "bg-gray-200";
 
