@@ -19,10 +19,9 @@ export default function RootLayout({
             content="Goal Guardian is a hockey team management system"
           />
         </head>
-        <body className={`${inter.className} antialiased`}>
+        <body className="bg-purple-50 {`${inter.className} antialiased`}">
           <Navbar />
-
-          <div className="container mx-auto mt-8 h-screen">{children}</div>
+          <div>{children}</div>
         </body>
       </html>
     </ClerkProvider>

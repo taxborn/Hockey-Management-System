@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold">Goal Guardian</h1>
+      <h1 className=" text-2xl font-bold" >Goal Guardian</h1>
       <p>Goal Guardian is a team-management application...</p>
     </>
   );
