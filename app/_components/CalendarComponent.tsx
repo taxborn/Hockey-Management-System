@@ -1,8 +1,8 @@
 "use client";
 
 import { Modal } from "flowbite";
+import React from "react";
 import { create_event as create_calendar_event } from "@/app/api/create-event";
-import React, { useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
@@ -19,43 +19,6 @@ interface Props {
 }
 
 export default function CalendarComponent({ events, role }: Props) {
-  useEffect(() => {
-    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
-
-    const handleClick = () => {
-      const closeEl = document.querySelector(
-        '[data-modal-hide="authentication-modal"]',
-      ) as HTMLElement;
-      const submitButton = document.querySelector(
-        '[type="submit"]',
-      ) as HTMLElement;
-      const modalEl = document.querySelector(
-        "#authentication-modal",
-      ) as HTMLElement;
-      const modal = new Modal(modalEl);
-
-      modal.show();
-
-      closeEl?.addEventListener("click", () => {
-        modal.hide();
-      });
-
-      submitButton?.addEventListener("click", () => {
-        create_calendar_event(
-          new FormData(modalEl!.querySelector("form") as HTMLFormElement),
-        );
-        modal.hide();
-        // TODO: Refresh the calendar
-      });
-    };
-
-    buttonEl?.addEventListener("click", handleClick);
-
-    return () => {
-      buttonEl?.removeEventListener("click", handleClick);
-    };
-  }, []);
-
   // TODO: Check for date creation permissions
   const handleDateClick = (arg: DateClickArg) => {
     const modalEl = document.querySelector(
@@ -94,7 +57,8 @@ export default function CalendarComponent({ events, role }: Props) {
 
   return (
     <>
-      <EventModal role={role} />
+      {/* Only render if the user is not a player role */}
+      {role != "Player" ? <EventModal /> : null}
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}

@@ -47,15 +47,11 @@ export default async function Home() {
         id: userObject.roleId,
       },
     });
-
-    console.log("Already created");
   }
 
   return (
     <>
       <h1 className="text-2xl font-bold">Hello, {user?.firstName}</h1>
-      <p>Is the user in the DB? {userObject != null ? "yes" : "no"}.</p>
-      <p>Their role: {role?.name}</p>
     </>
   );
 }

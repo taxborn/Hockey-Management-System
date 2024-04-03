@@ -1,8 +1,52 @@
-interface Props {
-  role: String;
-}
+import { useState, useEffect } from "react";
+import { create_event as create_calendar_event } from "@/app/api/create-event";
+import { Modal } from "flowbite";
 
-export default function EventModal({ role }: Props) {
+export default function EventModal() {
+  useEffect(() => {
+    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
+
+    const handleClick = () => {
+      const closeEl = document.querySelector(
+        '[data-modal-hide="authentication-modal"]',
+      ) as HTMLElement;
+      const submitButton = document.querySelector(
+        '[type="submit"]',
+      ) as HTMLElement;
+      const modalEl = document.querySelector(
+        "#authentication-modal",
+      ) as HTMLElement;
+      const modal = new Modal(modalEl);
+
+      modal.show();
+
+      closeEl?.addEventListener("click", () => {
+        modal.hide();
+      });
+
+      submitButton?.addEventListener("click", () => {
+        create_calendar_event(
+          new FormData(modalEl!.querySelector("form") as HTMLFormElement),
+        );
+        modal.hide();
+        // TODO: Refresh the calendar
+      });
+    };
+
+    buttonEl?.addEventListener("click", handleClick);
+
+    return () => {
+      buttonEl?.removeEventListener("click", handleClick);
+    };
+  }, []);
+  // Since this is defaulted to true, the event will be an all-day event
+  // If the user unchecks the box, we will show the end date input
+  const [allDay, setAllDay] = useState(true);
+
+  // This function will be called when the user checks or unchecks the box
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setAllDay(event.target.checked);
+
   return (
     <>
       <button
@@ -10,7 +54,7 @@ export default function EventModal({ role }: Props) {
         id="modal-button"
         data-modal-toggle="authentication-modal"
         // TODO: This is a hacky way to hide the button if the user is an admin, replace with a proper check
-        className={`${role == "Player" ? "hidden" : "block"} text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
       >
         Create Event
@@ -84,7 +128,6 @@ export default function EventModal({ role }: Props) {
                     id="description"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="7:07pm Hockey Game"
-                    required
                   />
                 </div>
 
@@ -101,8 +144,23 @@ export default function EventModal({ role }: Props) {
                     id="location"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Brensen Arena"
-                    required
                   />
+                </div>
+
+                <div className="flex items-center mb-4">
+                  <input
+                    id="all-day"
+                    checked={allDay}
+                    onChange={handleCheckboxChange}
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="all-day"
+                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    All-day event?
+                  </label>
                 </div>
 
                 <div>
@@ -110,10 +168,10 @@ export default function EventModal({ role }: Props) {
                     htmlFor="start"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Start Date
+                    {allDay ? "Date" : "Start Date"}
                   </label>
                   <input
-                    type="datetime-local"
+                    type={allDay ? "date" : "datetime-local"}
                     name="start"
                     id="start"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -122,12 +180,12 @@ export default function EventModal({ role }: Props) {
                   />
                 </div>
 
-                <div>
+                <div className={allDay ? "hidden" : ""}>
                   <label
                     htmlFor="end"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    End Date (leave blank for all-day event)
+                    End Date
                   </label>
                   <input
                     type="datetime-local"
