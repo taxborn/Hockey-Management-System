@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -14,15 +14,39 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+// The `User` model defines the user type
 model User {
-  id Int @id @default(autoincrement())
-  clerkId String @unique
-  roleId Int 
-  role Role @relation(fields: [roleId], references: [id])
+  id      Int     @id @default(autoincrement())
+  clerkId String  @unique
+  roleId  Int
+  role    Role    @relation(fields: [roleId], references: [id])
+  Event   Event[]
+  Group   Group[] // Allow a user to be in multiple groups
 }
 
+// The `Role` model defines the role type, there are three roles: admin, staff, and player
 model Role {
-  id Int @id @default(autoincrement())
-  name String
+  id    Int    @id @default(autoincrement())
+  name  String
   users User[]
+}
+
+// The `Group` model defines the group type, a group is a collection of users
+model Group {
+  id    Int    @id @default(autoincrement())
+  name  String
+  users User[]
+}
+
+// The `Event` model defines the event type, used in the calendar
+model Event {
+  id          Int       @id @default(autoincrement())
+  name        String
+  color       String
+  description String?
+  start_date  DateTime
+  end_date    DateTime? // Optional end date, if the event is a single day event this will be null
+  location    String
+  organizerId Int
+  organizer   User      @relation(fields: [organizerId], references: [id])
 }

@@ -20,6 +20,7 @@
     "@prisma/adapter-libsql": "^5.11.0",
     "@prisma/client": "^5.11.0",
     "@tldraw/tldraw": "^2.0.0-beta.3",
+    "flowbite": "^2.3.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18"

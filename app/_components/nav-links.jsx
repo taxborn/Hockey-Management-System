@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalendarIcon, HomeIcon, Bars2Icon, ClipboardIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon, HomeIcon, Bars2Icon, ClipboardIcon, ChatBubbleBottomCenterTextIcon, CircleStackIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 const links = [
@@ -8,6 +8,7 @@ const links = [
   { name: 'Whiteboard', href: '/home/whiteboard', icon: ClipboardIcon },
   { name: 'Messaging', href: '/home/message', icon: ChatBubbleBottomCenterTextIcon },
   { name: 'Planning Tool', href: '/home/planning', icon: Bars2Icon },
+  { name: "Storage", href: "/home/planning", icon: CircleStackIcon },
 ];
 
 export default function NavLinks() {

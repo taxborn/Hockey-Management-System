@@ -1,3 +1,7 @@
 export default function Page() {
-    return <p>Planning Page</p>;
-  }
+  return (
+    <>
+      <h1 className="text-2xl font-bold">Planning Tool</h1>
+    </>
+  );
+}
