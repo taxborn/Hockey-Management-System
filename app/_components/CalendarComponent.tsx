@@ -74,10 +74,18 @@ export default function CalendarComponent({ events, role }: Props) {
 }
 
 function renderEventContent(eventInfo: EventContentArg) {
-  const isHome = eventInfo.event.allDay;
+  const color = eventInfo.event.extendedProps.color;
+  const colorMap: { [key: string]: string } = {
+    "blue": "bg-blue-200",
+    "red": "bg-red-200",
+    "green": "bg-green-200",
+    "purple": "bg-purple-200",
+    "yellow": "bg-amber-200",
+  };
+  const colorClass = colorMap[color] || "bg-gray-200";
 
   return (
-    <div className={isHome ? "bg-indigo-200" : "bg-amber-200"}>
+    <div className={colorClass}>
       <b className="mr-2 text-black">{eventInfo.timeText}</b>
       <p className="inline-block text-black">{eventInfo.event.title}</p>
     </div>

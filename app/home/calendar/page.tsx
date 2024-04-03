@@ -35,9 +35,7 @@ export default async function Page() {
         title: event.name,
         start: event.start_date,
         end: event.end_date,
-        // We use the color field to denote home games
-        // TODO: This is a bit of a hack, we should probably have a separate field
-        extendedProps: { homeGame: event.color === "blue" },
+        extendedProps: { color: event.color },
       };
     }
 
@@ -46,9 +44,7 @@ export default async function Page() {
       title: event.name,
       date: event.start_date,
       allDay: true,
-      // We use the color field to denote home games
-      // TODO: This is a bit of a hack, we should probably have a separate field
-      extendedProps: { homeGame: event.color === "blue" },
+      extendedProps: { color: event.color },
     };
   });
 

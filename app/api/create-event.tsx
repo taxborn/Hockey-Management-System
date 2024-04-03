@@ -14,8 +14,10 @@ const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
 export async function create_event(formData: FormData) {
-  const title = formData.get("title") as string;
+  const name = formData.get("title") as string;
   const description = formData.get("description") as string;
+  let colorData = formData.get("color") as string;
+  const color = colorData.toLowerCase(); // Convert the color to lowercase
   const location = formData.get("location") as string;
   const start = formData.get("start") as string;
   const end = formData.get("end") as string;
@@ -30,7 +32,7 @@ export async function create_event(formData: FormData) {
 
   const event = await prisma.event.create({
     data: {
-      name: title,
+      name,
       description,
       location,
       // If we don't have an end date, we know this is an all-day event and
@@ -41,7 +43,7 @@ export async function create_event(formData: FormData) {
       // If we have an end date, we know this isn't an all-day event
       // Otherwise, this is a single-day event and we set end_date to null
       end_date: end ? new Date(end) : null,
-      color: "blue",
+      color,
       organizerId,
     },
   });
