@@ -39,4 +39,7 @@ export async function create_event(formData: FormData) {
       organizerId,
     },
   });
+
+  // Return the event so we can use it in the front-end
+  return event;
 }

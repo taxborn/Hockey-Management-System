@@ -64,9 +64,11 @@ export default function CalendarComponent({ events, role }: Props) {
       });
 
       submitButton?.addEventListener("click", () => {
-        create_calendar_event(
+        // This now holds the event that was created
+        const event = create_calendar_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
+
         modal.hide();
         // TODO: Refresh the calendar
       });
