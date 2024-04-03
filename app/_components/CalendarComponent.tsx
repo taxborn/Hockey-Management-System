@@ -23,9 +23,15 @@ export default function CalendarComponent({ events, role }: Props) {
     const buttonEl = document.querySelector("#modal-button") as HTMLElement;
 
     const handleClick = () => {
-      const closeEl = document.querySelector('[data-modal-hide="authentication-modal"]') as HTMLElement;
-      const submitButton = document.querySelector('[type="submit"]') as HTMLElement;
-      const modalEl = document.querySelector("#authentication-modal") as HTMLElement;
+      const closeEl = document.querySelector(
+        '[data-modal-hide="authentication-modal"]',
+      ) as HTMLElement;
+      const submitButton = document.querySelector(
+        '[type="submit"]',
+      ) as HTMLElement;
+      const modalEl = document.querySelector(
+        "#authentication-modal",
+      ) as HTMLElement;
       const modal = new Modal(modalEl);
 
       modal.show();
@@ -52,26 +58,32 @@ export default function CalendarComponent({ events, role }: Props) {
 
   // TODO: Check for date creation permissions
   const handleDateClick = (arg: DateClickArg) => {
-      const modalEl = document.querySelector("#authentication-modal") as HTMLElement;
-      const modal = new Modal(modalEl);
-      const closeEl = document.querySelector('[data-modal-hide="authentication-modal"]') as HTMLElement;
-      const submitButton = document.querySelector('[type="submit"]') as HTMLElement;
+    const modalEl = document.querySelector(
+      "#authentication-modal",
+    ) as HTMLElement;
+    const modal = new Modal(modalEl);
+    const closeEl = document.querySelector(
+      '[data-modal-hide="authentication-modal"]',
+    ) as HTMLElement;
+    const submitButton = document.querySelector(
+      '[type="submit"]',
+    ) as HTMLElement;
 
-      modal.show();
+    modal.show();
 
-      closeEl?.addEventListener("click", () => {
-        modal.hide();
-      });
+    closeEl?.addEventListener("click", () => {
+      modal.hide();
+    });
 
-      submitButton?.addEventListener("click", () => {
-        // This now holds the event that was created
-        const event = create_calendar_event(
-          new FormData(modalEl!.querySelector("form") as HTMLFormElement),
-        );
+    submitButton?.addEventListener("click", () => {
+      // This now holds the event that was created
+      const event = create_calendar_event(
+        new FormData(modalEl!.querySelector("form") as HTMLFormElement),
+      );
 
-        modal.hide();
-        // TODO: Refresh the calendar
-      });
+      modal.hide();
+      // TODO: Refresh the calendar
+    });
   };
 
   // TODO: When a user clicks an event, we should show a modal with more information
