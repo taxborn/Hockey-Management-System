@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <nav className="p-4 bg-purple-900 w-full">
-      <div className="flex justify-between max-w-screen-xl mx-auto ">
+      <div className="flex justify-between mx-auto">
         <Link href="/home">
           <Image
             src="/logo/MAV1_3C-OnDark.png"

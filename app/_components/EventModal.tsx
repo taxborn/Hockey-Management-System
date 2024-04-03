@@ -33,8 +33,8 @@ export default function EventModal() {
         create_calendar_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
-        router.push("/home/calendar");
         modal.hide();
+        router.push("/home/calendar");
       });
     };
 

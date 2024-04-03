@@ -7,6 +7,7 @@ type User = {
   email: string;
   lastSignin: number | null;
   firstName: string | null;
+  public: UserPublicMetadata;
   lastName: string | null;
 };
 
@@ -42,14 +43,18 @@ export default function UserSelection({ users }: Props) {
 
       {selectedUser && (
         <div>
-            <h2>
-                {selectedUser.firstName} {selectedUser.lastName}
-            </h2>
-            <p>Last sign in: {date}</p>
-            <p>Email: {selectedUser.email}</p>
-            <p>ID: {selectedUser.id}</p>
+          <h2>
+            {selectedUser.firstName} {selectedUser.lastName}
+          </h2>
+          <p>Last sign in: {date}</p>
+          <p>Email: {selectedUser.email}</p>
+          <p>ID: {selectedUser.id}</p>
+          <p>
+            Role:{" "}
+            {JSON.parse(JSON.stringify(selectedUser.public))["role"]["name"]}
+          </p>
         </div>
-        )}
+      )}
     </>
   );
 }

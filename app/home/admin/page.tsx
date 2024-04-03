@@ -5,7 +5,7 @@ import { PrismaClient, User } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 import UserSelection from "@/app/_components/UserSelection";
-import { use } from "chai";
+import GroupModal from "@/app/_components/GroupModal";
 
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
@@ -18,14 +18,14 @@ const prisma = new PrismaClient({ adapter });
 const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
 export default async function Page() {
-  const users = await clerk.users.getUserList();
+  let users = await clerk.users.getUserList();
 
   // Loop over the users
-  for (const user of users) {
+  for (let user of users) {
     // We first check if the user is in our database (not Clerk's), since
     // we need to keep track of that for roles.
     // TODO: There is probably a better name for this
-    const userObject: User | null = await prisma.user.findFirst({
+    let userObject: User | null = await prisma.user.findFirst({
       where: {
         clerkId: user?.id,
       },
@@ -33,7 +33,7 @@ export default async function Page() {
 
     // If the user doesn't exist, we create them
     if (userObject == null) {
-      await prisma.user.create({
+      userObject = await prisma.user.create({
         data: {
           clerkId: user?.id || "",
           // Role ID 3 here denotes the 'player' RoleId.
@@ -45,6 +45,17 @@ export default async function Page() {
         },
       });
     }
+
+    // Get the role name
+    let role = await prisma.role.findFirst({
+      where: { id: userObject.roleId },
+    });
+
+    clerk.users.updateUserMetadata(user.id, {
+      publicMetadata: {
+        role,
+      },
+    });
   }
 
   const count = await clerk.users.getCount();
@@ -56,7 +67,10 @@ export default async function Page() {
     phone: user.phoneNumbers,
     firstName: user.firstName,
     lastName: user.lastName,
+    public: user.publicMetadata,
   }));
+
+  const groups = await prisma.group.findMany();
 
   return (
     <>
@@ -69,6 +83,17 @@ export default async function Page() {
       <UserSelection users={plainUsers} />
 
       <h2 className="text-2xl">Groups</h2>
+      <GroupModal users={plainUsers} />
+      {/* List all of the groups */}
+      <ul>
+        {groups.length == 0 && <p>No groups</p>}
+
+        {/* TODO: Create a table and list all users within group */}
+        {groups.map((group) => (
+          <li key={group.id}>{group.name}</li>
+        ))}
+      </ul>
+
       <h2 className="text-2xl">Permissions</h2>
     </>
   );
