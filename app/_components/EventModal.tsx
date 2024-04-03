@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { create_event as create_calendar_event } from "@/app/api/create-event";
 import { Modal } from "flowbite";
 
@@ -33,7 +33,7 @@ export default function EventModal() {
         create_calendar_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
-        router.push('/home/calendar');
+        router.push("/home/calendar");
         modal.hide();
       });
     };
@@ -137,23 +137,23 @@ export default function EventModal() {
                 </div>
 
                 <div>
-                <label
-                  htmlFor="color"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Event color
-                </label>
-                <select
-                  id="color"
-                  name="color"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option>Blue</option>
-                  <option>Red</option>
-                  <option>Green</option>
-                  <option>Purple</option>
-                  <option>Yellow</option>
-                </select>
+                  <label
+                    htmlFor="color"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Event color
+                  </label>
+                  <select
+                    id="color"
+                    name="color"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option>Blue</option>
+                    <option>Red</option>
+                    <option>Green</option>
+                    <option>Purple</option>
+                    <option>Yellow</option>
+                  </select>
                 </div>
 
                 <div>
