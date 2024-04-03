@@ -6,6 +6,7 @@ import {
   ClipboardIcon,
   ChatBubbleBottomCenterTextIcon,
   CircleStackIcon,
+  BuildingLibraryIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
@@ -20,6 +21,7 @@ const links = [
   },
   { name: "Planning Tool", href: "/home/planning", icon: Bars2Icon },
   { name: "Storage", href: "/home/planning", icon: CircleStackIcon },
+  { name: "Administration", href: "/home/admin", icon: BuildingLibraryIcon },
 ];
 
 export default function NavLinks() {
