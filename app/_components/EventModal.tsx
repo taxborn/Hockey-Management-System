@@ -43,7 +43,7 @@ export default function EventModal() {
     return () => {
       buttonEl?.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [router]);
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
   const [allDay, setAllDay] = useState(true);
