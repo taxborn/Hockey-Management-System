@@ -1,7 +1,7 @@
 "use client";
-import React from 'react';
-import Link from 'next/link'; 
-import Image from 'next/image'; 
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@clerk/nextjs";
 import { UserButton } from "@clerk/nextjs";
 
@@ -11,24 +11,29 @@ export default function Navbar() {
   return (
     <nav className="p-4 bg-purple-900 w-full">
       <div className="flex justify-between max-w-screen-xl mx-auto ">
-      <Link href="/home">
-             
-             <Image
-               src="/logo/MAV1_3C-OnDark.png"
-               alt="MSU logo"
-               width={100} 
-               height={50}
-                
-             /> 
-         </Link>
-      <div style={{ width: '100%', textAlign: 'left', paddingLeft: '20px', paddingTop: '20px'}}>
-        <a
-          href={userId ? "/home" : "/"}
-          className="text-xl font-bold tracking-tight text-white"
+        <Link href="/home">
+          <Image
+            src="/logo/MAV1_3C-OnDark.png"
+            alt="MSU logo"
+            width={100}
+            height={50}
+          />
+        </Link>
+        <div
+          style={{
+            width: "100%",
+            textAlign: "left",
+            paddingLeft: "20px",
+            paddingTop: "20px",
+          }}
         >
-          MNSU Women{"'"}s Hockey Team
-        </a>
-      </div>
+          <a
+            href={userId ? "/home" : "/"}
+            className="text-xl font-bold tracking-tight text-white"
+          >
+            MNSU Women{"'"}s Hockey Team
+          </a>
+        </div>
 
         {/* TODO: Replace the given <UserButton> Clerk button with something more light-weight */}
         {userId ? (

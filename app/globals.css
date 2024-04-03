@@ -14,3 +14,6 @@ a {
   @apply font-semibold hover:underline underline-offset-4;
 }
 
+td[role="gridcell"] {
+  @apply cursor-pointer;
+}

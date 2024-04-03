@@ -3,9 +3,6 @@ import { PrismaClient, User } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 
-
-
-
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
   authToken: process.env.TURSO_AUTH_TOKEN || "",
@@ -59,7 +56,6 @@ export default async function Home() {
       <h1 className="text-2xl font-bold">Hello, {user?.firstName}</h1>
       <p>Is the user in the DB? {userObject != null ? "yes" : "no"}.</p>
       <p>Their role: {role?.name}</p>
-      
-      </>
+    </>
   );
 }

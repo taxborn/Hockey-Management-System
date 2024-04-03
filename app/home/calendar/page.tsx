@@ -21,7 +21,9 @@ export default async function Page() {
   const dbUser = await prisma.user.findFirst({
     where: { clerkId: user?.id },
   });
-  const role: Role | null = await prisma.role.findFirst({ where: { id: dbUser?.roleId } });
+  const role: Role | null = await prisma.role.findFirst({
+    where: { id: dbUser?.roleId },
+  });
 
   // When the page loads, we fetch all events from the database
   const events = await prisma.event.findMany();
@@ -54,7 +56,10 @@ export default async function Page() {
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <CalendarComponent events={calendarEvents} role={role?.name || "Player"} />
+      <CalendarComponent
+        events={calendarEvents}
+        role={role?.name || "Player"}
+      />
     </>
   );
 }
