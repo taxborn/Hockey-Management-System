@@ -1,7 +1,11 @@
+"use server";
+
 import { Clerk } from "@clerk/backend";
 import { PrismaClient, User } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
+import UserSelection from "@/app/_components/UserSelection";
+import { use } from "chai";
 
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
@@ -43,17 +47,29 @@ export default async function Page() {
     }
   }
 
+  const count = await clerk.users.getCount();
+
+  const plainUsers = users.map((user) => ({
+    id: user.id,
+    email: user.emailAddresses[0].emailAddress,
+    lastSignin: user.lastSignInAt,
+    phone: user.phoneNumbers,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  }));
+
   return (
     <>
-      <h1 className="text-2xl">Admin</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>
-            {user.firstName} {user.lastName} <i>({user.id})</i>
-          </li>
-        ))}
-      </ul>
+      {/* Force refresh */}
+      <p>
+        Problems? <a href="">Force refresh</a>
+      </p>
+      <h1 className="text-2xl">User list ({count})</h1>
+
+      <UserSelection users={plainUsers} />
+
       <h2 className="text-2xl">Groups</h2>
+      <h2 className="text-2xl">Permissions</h2>
     </>
   );
 }
