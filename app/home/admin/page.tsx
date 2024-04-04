@@ -90,7 +90,7 @@ export default async function Page() {
 
         {/* TODO: Create a table and list all users within group */}
         {groups.map((group) => (
-          <li key={group.id}>{group.name}</li>
+          <li key={group.id}>{group.name} ()</li>
         ))}
       </ul>
 

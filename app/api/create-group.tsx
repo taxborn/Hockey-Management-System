@@ -13,16 +13,16 @@ const adapter = new PrismaLibSQL(libsql);
 const prisma = new PrismaClient({ adapter });
 
 export async function create_group(formData: FormData) {
-    const name = formData.get("name") as string;
-    // We now have a list of IDs
-    const users = formData.getAll("users") as string[];
+  const name = formData.get("name") as string;
+  // We now have a list of IDs
+  const users = formData.getAll("users") as string[];
 
-    const group = await prisma.group.create({
-        data: {
-            name,
-            users: {
-                connect: users.map((userId) => ({clerkId: userId }))
-            }
-        }
-    })
+  const group = await prisma.group.create({
+    data: {
+      name,
+      users: {
+        connect: users.map((userId) => ({ clerkId: userId })),
+      },
+    },
+  });
 }
