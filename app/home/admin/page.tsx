@@ -46,11 +46,13 @@ export default async function Page() {
       });
     }
 
-    // Get the role name
+    // Get the role name by looking up the role ID in the database
     let role = await prisma.role.findFirst({
       where: { id: userObject.roleId },
     });
 
+    // Then we can update the user's metadata with the role name
+    // for easier access in the future
     clerk.users.updateUserMetadata(user.id, {
       publicMetadata: {
         role,
@@ -60,6 +62,9 @@ export default async function Page() {
 
   const count = await clerk.users.getCount();
 
+  // We'll format the users to a more usable format, React doesn't like
+  // when we send the Clerk User object directly, so we'll create a plain
+  // object with the properties we need
   const plainUsers = users.map((user) => ({
     id: user.id,
     email: user.emailAddresses[0].emailAddress,
@@ -79,7 +84,6 @@ export default async function Page() {
         Problems? <a href="">Force refresh</a>
       </p>
       <h1 className="text-2xl">User list ({count})</h1>
-
       <UserSelection users={plainUsers} />
 
       <h2 className="text-2xl">Groups</h2>
