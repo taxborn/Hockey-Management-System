@@ -40,9 +40,7 @@ export default function HockeyCalendar({ events, role }: Props) {
     ) as HTMLElement;
 
     // Set the date of the event to the date the user clicked on
-    const dateElement = document.querySelector(
-      '#start',
-    ) as HTMLInputElement;
+    const dateElement = document.querySelector("#start") as HTMLInputElement;
     dateElement.value = arg.dateStr;
 
     modal.show();

@@ -31,13 +31,12 @@ export default function CreateEventModal() {
         // If the form is not valid, don't do anything
         if (!modalEl?.querySelector("form")?.checkValidity()) return;
 
-      // Prevent the form from submitting, we'll handle it ourselves
-      clickEvent.preventDefault();
+        // Prevent the form from submitting, we'll handle it ourselves
+        clickEvent.preventDefault();
 
         const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
-        console.log(event)
         modal.hide();
         router.push("/home/calendar");
       });
