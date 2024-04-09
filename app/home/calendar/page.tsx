@@ -1,30 +1,21 @@
 import React from "react";
 import { currentUser } from "@clerk/nextjs";
-
-import CalendarComponent from "@/app/_components/CalendarComponent";
+import HockeyCalendar from "@/app/_components/HockeyCalendar";
 import { EventInput } from "@fullcalendar/core/index.js";
-
-import { PrismaClient, Role } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
-
-const libsql = createClient({
-  url: process.env.TURSO_DATABASE_URL || "",
-  authToken: process.env.TURSO_AUTH_TOKEN || "",
-});
-
-const adapter = new PrismaLibSQL(libsql);
-const prisma = new PrismaClient({ adapter });
+import { Roles } from "@prisma/client";
+import prisma from "@/lib/turso";
 
 export default async function Page() {
   const user = await currentUser();
-  const dbUser = await prisma.user.findFirst({
+  const dbUser = await prisma.users.findFirst({
     where: { clerkId: user?.id },
   });
-  const role: Role | null = await prisma.role.findFirst({ where: { id: dbUser?.roleId } });
+  const role: Roles | null = await prisma.roles.findFirst({
+    where: { id: dbUser?.roleId },
+  });
 
   // When the page loads, we fetch all events from the database
-  const events = await prisma.event.findMany();
+  const events = await prisma.events.findMany();
   // Coerce the Prisma Event objects into FullCalendar EventInput objects
   const calendarEvents: EventInput[] = events.map((event) => {
     // If we have an end date, we know this isn't an all-day event
@@ -33,9 +24,7 @@ export default async function Page() {
         title: event.name,
         start: event.start_date,
         end: event.end_date,
-        // We use the color field to denote home games
-        // TODO: This is a bit of a hack, we should probably have a separate field
-        extendedProps: { homeGame: event.color === "blue" },
+        extendedProps: { color: event.color },
       };
     }
 
@@ -44,9 +33,7 @@ export default async function Page() {
       title: event.name,
       date: event.start_date,
       allDay: true,
-      // We use the color field to denote home games
-      // TODO: This is a bit of a hack, we should probably have a separate field
-      extendedProps: { homeGame: event.color === "blue" },
+      extendedProps: { color: event.color },
     };
   });
 
@@ -54,7 +41,7 @@ export default async function Page() {
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <CalendarComponent events={calendarEvents} role={role?.name || "Player"} />
+      <HockeyCalendar events={calendarEvents} role={role?.name || "Player"} />
     </>
   );
 }

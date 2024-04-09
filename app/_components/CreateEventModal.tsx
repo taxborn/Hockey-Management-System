@@ -1,38 +1,24 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { create_event } from "@/lib/create-event";
 import { Modal } from "flowbite";
 
-import { create_event } from "@/app/api/create-event";
+export default function CreateEventModal() {
+  const router = useRouter();
 
-import React, { useEffect } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import {
-  EventClickArg,
-  EventContentArg,
-  EventInput,
-} from "@fullcalendar/core/index.js";
-
-interface Props {
-  events: EventInput[];
-  role: String;
-}
-
-export default function CalendarComponent({ events, role }: Props) {
   useEffect(() => {
-    const buttonEl: HTMLElement | null =
-      document.querySelector("#modal-button");
-
     const handleClick = () => {
-      const closeEl: HTMLElement | null = document.querySelector(
+      const closeEl = document.querySelector(
         '[data-modal-hide="authentication-modal"]',
-      );
-      const submitButton: HTMLElement | null =
-        document.querySelector('[type="submit"]');
-      const modalEl: HTMLElement | null = document.querySelector(
+      ) as HTMLElement;
+      const submitButton = document.querySelector(
+        '[type="submit"]',
+      ) as HTMLElement;
+      const modalEl = document.querySelector(
         "#authentication-modal",
-      );
+      ) as HTMLElement;
       const modal = new Modal(modalEl);
 
       modal.show();
@@ -40,32 +26,34 @@ export default function CalendarComponent({ events, role }: Props) {
       closeEl?.addEventListener("click", () => {
         modal.hide();
       });
-      submitButton?.addEventListener("click", () => {
-        create_event(
+
+      submitButton?.addEventListener("click", (clickEvent) => {
+        // If the form is not valid, don't do anything
+        if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+        // Prevent the form from submitting, we'll handle it ourselves
+        clickEvent.preventDefault();
+
+        const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
         modal.hide();
-        // TODO: Refresh the calendar
+        router.push("/home/calendar");
       });
     };
 
+    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
     buttonEl?.addEventListener("click", handleClick);
 
-    return () => {
-      buttonEl?.removeEventListener("click", handleClick);
-    };
-  }, []);
+    return () => buttonEl?.removeEventListener("click", handleClick);
+  }, [router]);
+  // Since this is defaulted to true, the event will be an all-day event
+  // If the user unchecks the box, we will show the end date input
+  const [isAllDayEvent, setAllDayEvent] = useState(true);
 
-  // TODO: When a user clicks a date, we should create a new event
-  const handleDateClick = (arg: DateClickArg) => {
-    console.log(arg);
-  };
-
-  // TODO: When a user clicks an event, we should show a modal with more information
-  // about the event, and allow them to edit it
-  const handleEventClick = (arg: EventClickArg) => {
-    console.log(arg);
-  };
+  // This function will be called when the user checks or unchecks the box
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setAllDayEvent(event.target.checked);
 
   return (
     <>
@@ -73,8 +61,8 @@ export default function CalendarComponent({ events, role }: Props) {
         data-modal-target="authentication-modal"
         id="modal-button"
         data-modal-toggle="authentication-modal"
-        // TODO: This is a hacky way to hide the button if the user is an admin
-        className={`${role == 'Player' ? 'hidden' : 'block'} text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+        // TODO: This is a hacky way to hide the button if the user is an admin, replace with a proper check
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
       >
         Create Event
@@ -148,8 +136,27 @@ export default function CalendarComponent({ events, role }: Props) {
                     id="description"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="7:07pm Hockey Game"
-                    required
                   />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="color"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Event color
+                  </label>
+                  <select
+                    id="color"
+                    name="color"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option>Blue</option>
+                    <option>Red</option>
+                    <option>Green</option>
+                    <option>Purple</option>
+                    <option>Yellow</option>
+                  </select>
                 </div>
 
                 <div>
@@ -165,8 +172,23 @@ export default function CalendarComponent({ events, role }: Props) {
                     id="location"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Brensen Arena"
-                    required
                   />
+                </div>
+
+                <div className="flex items-center mb-4">
+                  <input
+                    id="all-day"
+                    checked={isAllDayEvent}
+                    onChange={handleCheckboxChange}
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="all-day"
+                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    All-day event?
+                  </label>
                 </div>
 
                 <div>
@@ -174,24 +196,23 @@ export default function CalendarComponent({ events, role }: Props) {
                     htmlFor="start"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Start Date
+                    {isAllDayEvent ? "Date" : "Start Date"}
                   </label>
                   <input
-                    type="datetime-local"
+                    type={isAllDayEvent ? "date" : "datetime-local"}
                     name="start"
                     id="start"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Brensen Arena"
                     required
                   />
                 </div>
 
-                <div>
+                <div className={isAllDayEvent ? "hidden" : ""}>
                   <label
                     htmlFor="end"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    End Date (leave blank for all-day event)
+                    End Date
                   </label>
                   <input
                     type="datetime-local"
@@ -199,7 +220,7 @@ export default function CalendarComponent({ events, role }: Props) {
                     id="end"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Brensen Arena"
-                    required
+                    required={!isAllDayEvent}
                   />
                 </div>
 
@@ -214,27 +235,6 @@ export default function CalendarComponent({ events, role }: Props) {
           </div>
         </div>
       </div>
-
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        editable={true}
-        events={events}
-        eventContent={renderEventContent}
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
-      />
     </>
-  );
-}
-
-function renderEventContent(eventInfo: EventContentArg) {
-  const isHome = eventInfo.event.allDay;
-
-  return (
-    <div className={isHome ? "bg-indigo-200" : "bg-amber-200"}>
-      <b className="mr-2 text-black">{eventInfo.timeText}</b>
-      <p className="inline-block text-black">{eventInfo.event.title}</p>
-    </div>
   );
 }
