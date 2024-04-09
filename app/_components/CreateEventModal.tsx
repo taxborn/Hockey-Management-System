@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { create_event as create_calendar_event } from "@/lib/create-event";
+import { create_event } from "@/lib/create-event";
 import { Modal } from "flowbite";
 
 export default function CreateEventModal() {
@@ -28,7 +28,7 @@ export default function CreateEventModal() {
       });
 
       submitButton?.addEventListener("click", () => {
-        create_calendar_event(
+        const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
         modal.hide();

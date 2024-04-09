@@ -2,20 +2,20 @@ import React from "react";
 import { currentUser } from "@clerk/nextjs";
 import HockeyCalendar from "@/app/_components/HockeyCalendar";
 import { EventInput } from "@fullcalendar/core/index.js";
-import { Role } from "@prisma/client";
+import { Roles } from "@prisma/client";
 import prisma from "@/lib/turso";
 
 export default async function Page() {
   const user = await currentUser();
-  const dbUser = await prisma.user.findFirst({
+  const dbUser = await prisma.users.findFirst({
     where: { clerkId: user?.id },
   });
-  const role: Role | null = await prisma.role.findFirst({
+  const role: Roles | null = await prisma.roles.findFirst({
     where: { id: dbUser?.roleId },
   });
 
   // When the page loads, we fetch all events from the database
-  const events = await prisma.event.findMany();
+  const events = await prisma.events.findMany();
   // Coerce the Prisma Event objects into FullCalendar EventInput objects
   const calendarEvents: EventInput[] = events.map((event) => {
     // If we have an end date, we know this isn't an all-day event

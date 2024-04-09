@@ -1,44 +1,30 @@
 import { currentUser } from "@clerk/nextjs";
-import { User } from "@prisma/client";
 import prisma from "@/lib/turso";
 
 export default async function Home() {
+  // Role ID 3 here denotes the 'player' RoleId and is the default role for all new users.
+  const PLAYER_ROLE_ID = 3;
+
   const user = await currentUser();
-  let role = null;
 
   // We first check if the user is in our database (not Clerk's), since
-  // we need to keep track of that for roles.
-  // TODO: There is probably a better name for this
-  const userObject: User | null = await prisma.user.findFirst({
+  // we need to keep track of that for roles and other data. We use the
+  // upsert method to create the user if they don't exist,
+  await prisma.users.upsert({
     where: {
-      clerkId: user?.id,
+      clerkId: user!.id,
     },
-  });
-
-  // If the user is not in the database, we create them
-  // TODO: It seems this Home() component is loaded twice,
-  // because the console.log's come up twice.
-  if (userObject == null) {
-    await prisma.user.create({
-      data: {
-        clerkId: user?.id || "",
-        // Role ID 3 here denotes the 'player' RoleId.
-        role: {
-          connect: {
-            id: 3,
-          },
+    create: {
+      clerkId: user!.id,
+      role: {
+        connect: {
+          id: PLAYER_ROLE_ID,
         },
       },
-    });
-  } else {
-    // TODO: Since Prisma is an ORM, it probably has a fancy function for this
-    // already
-    role = await prisma.role.findFirst({
-      where: {
-        id: userObject.roleId,
-      },
-    });
-  }
+    },
+    // We don't need to update anything, but we need to provide an empty object
+    update: {},
+  });
 
   return (
     <>

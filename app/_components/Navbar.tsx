@@ -22,9 +22,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <div
-            className="text-white font-bold content-center"
-          >
+          <div className="text-white font-bold content-center">
             <a
               href={userId ? "/home" : "/"}
               className="text-xl hidden md:block font-bold tracking-tight text-white ml-4"
@@ -37,8 +35,8 @@ export default function Navbar() {
         {/* TODO: Replace the given <UserButton> Clerk button with something more light-weight */}
         {userId ? (
           <div className="content-center">
-          <UserButton afterSignOutUrl="/" />
-            </div>
+            <UserButton afterSignOutUrl="/" />
+          </div>
         ) : (
           <div className="text-white font-bold content-center">
             <a href="/sign-in" className="mr-2">

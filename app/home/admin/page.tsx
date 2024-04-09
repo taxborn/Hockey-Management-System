@@ -1,7 +1,7 @@
 "use server";
 
 import { Clerk } from "@clerk/backend";
-import { User } from "@prisma/client";
+import { Users } from "@prisma/client";
 import UserSelection from "@/app/_components/UserSelection";
 import CreateGroupModal from "@/app/_components/CreateGroupModal";
 import prisma from "@/lib/turso";
@@ -15,7 +15,7 @@ export default async function Page() {
     // We first check if the user is in our database (not Clerk's), since
     // we need to keep track of that for roles.
     // TODO: There is probably a better name for this
-    let userObject: User | null = await prisma.user.findFirst({
+    let userObject: Users | null = await prisma.users.findFirst({
       where: {
         clerkId: user?.id,
       },
@@ -23,7 +23,7 @@ export default async function Page() {
 
     // If the user doesn't exist, we create them
     if (userObject == null) {
-      userObject = await prisma.user.create({
+      userObject = await prisma.users.create({
         data: {
           clerkId: user?.id || "",
           // Role ID 3 here denotes the 'player' RoleId.
@@ -35,19 +35,6 @@ export default async function Page() {
         },
       });
     }
-
-    // Get the role name by looking up the role ID in the database
-    let role = await prisma.role.findFirst({
-      where: { id: userObject.roleId },
-    });
-
-    // Then we can update the user's metadata with the role name
-    // for easier access in the future
-    clerk.users.updateUserMetadata(user.id, {
-      publicMetadata: {
-        role,
-      },
-    });
   }
 
   const count = await clerk.users.getCount();
@@ -65,7 +52,7 @@ export default async function Page() {
     public: user.publicMetadata,
   }));
 
-  const groups = await prisma.group.findMany();
+  const groups = await prisma.userGroups.findMany();
 
   return (
     <>
