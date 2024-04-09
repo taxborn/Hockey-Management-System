@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { create_event as create_calendar_event } from "@/app/api/create-event";
+import { create_event as create_calendar_event } from "@/lib/create-event";
 import { Modal } from "flowbite";
 
 export default function CreateEventModal() {

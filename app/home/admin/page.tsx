@@ -1,26 +1,16 @@
 "use server";
 
 import { Clerk } from "@clerk/backend";
-import { PrismaClient, User } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
+import { User } from "@prisma/client";
 import UserSelection from "@/app/_components/UserSelection";
 import CreateGroupModal from "@/app/_components/CreateGroupModal";
-
-const libsql = createClient({
-  url: process.env.TURSO_DATABASE_URL || "",
-  authToken: process.env.TURSO_AUTH_TOKEN || "",
-});
-
-const adapter = new PrismaLibSQL(libsql);
-const prisma = new PrismaClient({ adapter });
+import prisma from "@/lib/turso";
 
 const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
 export default async function Page() {
   let users = await clerk.users.getUserList();
 
-  // Loop over the users
   for (let user of users) {
     // We first check if the user is in our database (not Clerk's), since
     // we need to keep track of that for roles.

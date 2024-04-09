@@ -1,20 +1,9 @@
 import React from "react";
 import { currentUser } from "@clerk/nextjs";
-
 import HockeyCalendar from "@/app/_components/HockeyCalendar";
 import { EventInput } from "@fullcalendar/core/index.js";
-
-import { PrismaClient, Role } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
-
-const libsql = createClient({
-  url: process.env.TURSO_DATABASE_URL || "",
-  authToken: process.env.TURSO_AUTH_TOKEN || "",
-});
-
-const adapter = new PrismaLibSQL(libsql);
-const prisma = new PrismaClient({ adapter });
+import { Role } from "@prisma/client";
+import prisma from "@/lib/turso";
 
 export default async function Page() {
   const user = await currentUser();

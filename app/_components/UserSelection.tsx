@@ -23,9 +23,8 @@ export default function UserSelection({ users }: Props) {
 
   // Whenever the select changes, we'll get the user object from the users array
   const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const userId = event.target.value;
     // We'll find the user with the same id as the selected value
-    const user = users.find((user) => user.id === userId);
+    const user = users.find((user) => user.id === event.target.value);
     // If the user is not found, we'll set it to null
     setSelectedUser(user || null);
   };

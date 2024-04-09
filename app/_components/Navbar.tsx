@@ -11,36 +11,36 @@ export default function Navbar() {
 
   return (
     <nav className="p-4 bg-purple-900 w-full">
-      <div className="flex justify-between mx-auto">
-        <Link href="/home">
-          <Image
-            src="/logo/MAV1_3C-OnDark.png"
-            alt="MSU logo"
-            width={100}
-            height={50}
-          />
-        </Link>
-        <div
-          style={{
-            width: "100%",
-            textAlign: "left",
-            paddingLeft: "20px",
-            paddingTop: "20px",
-          }}
-        >
-          <a
-            href={userId ? "/home" : "/"}
-            className="text-xl font-bold tracking-tight text-white"
+      <div className="flex justify-between align-middle mx-auto">
+        <div className="flex align-middle">
+          <Link href={userId ? "/home" : "/"}>
+            <Image
+              src="/logo/MAV1_3C-OnDark.png"
+              alt="MNSU logo"
+              width={75}
+              height={75}
+            />
+          </Link>
+
+          <div
+            className="text-white font-bold content-center"
           >
-            MNSU Women{"'"}s Hockey Team
-          </a>
+            <a
+              href={userId ? "/home" : "/"}
+              className="text-xl hidden md:block font-bold tracking-tight text-white ml-4"
+            >
+              MNSU Women{"'"}s Hockey Team
+            </a>
+          </div>
         </div>
 
         {/* TODO: Replace the given <UserButton> Clerk button with something more light-weight */}
         {userId ? (
+          <div className="content-center">
           <UserButton afterSignOutUrl="/" />
+            </div>
         ) : (
-          <div className="text-white font-bold">
+          <div className="text-white font-bold content-center">
             <a href="/sign-in" className="mr-2">
               sign in
             </a>

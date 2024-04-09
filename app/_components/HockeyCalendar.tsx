@@ -3,7 +3,7 @@
 import { Modal } from "flowbite";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { create_event as create_calendar_event } from "@/app/api/create-event";
+import { create_event as create_calendar_event } from "@/lib/create-event";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
