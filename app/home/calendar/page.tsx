@@ -1,7 +1,7 @@
 import React from "react";
 import { currentUser } from "@clerk/nextjs";
 
-import CalendarComponent from "@/app/_components/CalendarComponent";
+import HockeyCalendar from "@/app/_components/HockeyCalendar";
 import { EventInput } from "@fullcalendar/core/index.js";
 
 import { PrismaClient, Role } from "@prisma/client";
@@ -52,10 +52,7 @@ export default async function Page() {
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <CalendarComponent
-        events={calendarEvents}
-        role={role?.name || "Player"}
-      />
+      <HockeyCalendar events={calendarEvents} role={role?.name || "Player"} />
     </>
   );
 }

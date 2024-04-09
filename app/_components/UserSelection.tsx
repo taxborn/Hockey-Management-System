@@ -53,12 +53,17 @@ export default function UserSelection({ users }: Props) {
 
       {selectedUser && (
         <div className="bg-white rounded p-2 my-2">
-          <h2 className="font-bold">{selectedUser.firstName} {selectedUser.lastName} <i className="font-normal text-gray-400">(Last sign in: {date})</i></h2>
+          <h2 className="font-bold">
+            {selectedUser.firstName} {selectedUser.lastName}{" "}
+            <i className="font-normal text-gray-400">(Last sign in: {date})</i>
+          </h2>
           {/* <p>ID: {selectedUser.id}</p> */}
           <p>Email: {selectedUser.email}</p>
           {/* This is sort of a hack to get the role name, we'll just stringify the object
               and then parse it back to get the role name */}
-          <p>Role: {JSON.parse(JSON.stringify(selectedUser.public)).role.name}</p>
+          <p>
+            Role: {JSON.parse(JSON.stringify(selectedUser.public)).role.name}
+          </p>
         </div>
       )}
     </>

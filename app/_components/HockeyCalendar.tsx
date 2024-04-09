@@ -12,22 +12,26 @@ import {
   EventContentArg,
   EventInput,
 } from "@fullcalendar/core/index.js";
-import EventModal from "./EventModal";
+import CreateEventModal from "./CreateEventModal";
 
 interface Props {
   events: EventInput[];
   role: String;
 }
 
-export default function CalendarComponent({ events, role }: Props) {
+export default function HockeyCalendar({ events, role }: Props) {
   const router = useRouter();
 
   // TODO: Check for date creation permissions
+  // The function that handles when a user clicks on a certain date on the calendar.
+  // This should show a modal that allows the user to create an event for that date.
   const handleDateClick = (arg: DateClickArg) => {
+    // Construct the modal
     const modalEl = document.querySelector(
       "#authentication-modal",
     ) as HTMLElement;
     const modal = new Modal(modalEl);
+    // Get the close button and the submit button
     const closeEl = document.querySelector(
       '[data-modal-hide="authentication-modal"]',
     ) as HTMLElement;
@@ -37,15 +41,15 @@ export default function CalendarComponent({ events, role }: Props) {
 
     modal.show();
 
-    closeEl?.addEventListener("click", () => {
-      modal.hide();
-    });
-
+    // Add event listeners to the close and submit buttons
+    closeEl?.addEventListener("click", () => modal.hide());
     submitButton?.addEventListener("click", () => {
-      // This now holds the event that was created
-      const event = create_calendar_event(
-        new FormData(modalEl!.querySelector("form") as HTMLFormElement),
+      const formData = new FormData(
+        modalEl!.querySelector("form") as HTMLFormElement,
       );
+      // TODO: Instead of refreshing the page, we should add the event to the calendar
+      // and close the modal
+      const event = create_calendar_event(formData);
 
       router.push("/home/calendar");
 
@@ -62,7 +66,7 @@ export default function CalendarComponent({ events, role }: Props) {
   return (
     <>
       {/* Only render if the user is not a player role */}
-      {role != "Player" ? <EventModal /> : null}
+      {role != "Player" ? <CreateEventModal /> : null}
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -78,7 +82,6 @@ export default function CalendarComponent({ events, role }: Props) {
 }
 
 function renderEventContent(eventInfo: EventContentArg) {
-  const color = eventInfo.event.extendedProps.color;
   const colorMap: { [key: string]: string } = {
     blue: "bg-blue-200 border border-blue-500",
     red: "bg-red-200 border border-red-500",
@@ -86,6 +89,9 @@ function renderEventContent(eventInfo: EventContentArg) {
     purple: "bg-purple-300 border border-purple-800",
     yellow: "bg-amber-200 border border-amber-500",
   };
+  // Get the color of the event
+  const color = eventInfo.event.extendedProps.color;
+  // Get the color classes for the event, or default to gray
   const colorClass = colorMap[color] || "bg-gray-200";
 
   return (

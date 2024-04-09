@@ -5,7 +5,7 @@ import { PrismaClient, User } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
 import UserSelection from "@/app/_components/UserSelection";
-import GroupModal from "@/app/_components/GroupModal";
+import CreateGroupModal from "@/app/_components/CreateGroupModal";
 
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
@@ -87,7 +87,7 @@ export default async function Page() {
       <UserSelection users={plainUsers} />
 
       <h2 className="text-2xl">Groups</h2>
-      <GroupModal users={plainUsers} />
+      <CreateGroupModal users={plainUsers} />
       {/* List all of the groups */}
       <ul>
         {groups.length == 0 && <p>No groups</p>}

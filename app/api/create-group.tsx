@@ -27,4 +27,6 @@ export async function create_group(formData: FormData) {
       },
     },
   });
+
+  return group;
 }

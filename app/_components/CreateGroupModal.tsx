@@ -18,7 +18,7 @@ interface Props {
   users: User[];
 }
 
-export default function GroupModal({ users }: Props) {
+export default function CreateGroupModal({ users }: Props) {
   const router = useRouter();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function GroupModal({ users }: Props) {
       });
 
       submitButton?.addEventListener("click", () => {
-        create_group(
+        const group = create_group(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
         router.push("/home/admin");
@@ -134,6 +134,7 @@ export default function GroupModal({ users }: Props) {
                       (hold down ctrl to select multiple users at once)
                     </i>
                   </label>
+                  {/* List of users, iterate over the users map */}
                   <select
                     id="users"
                     name="users"

@@ -5,12 +5,10 @@ import { useRouter } from "next/navigation";
 import { create_event as create_calendar_event } from "@/app/api/create-event";
 import { Modal } from "flowbite";
 
-export default function EventModal() {
+export default function CreateEventModal() {
   const router = useRouter();
 
   useEffect(() => {
-    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
-
     const handleClick = () => {
       const closeEl = document.querySelector(
         '[data-modal-hide="authentication-modal"]',
@@ -38,11 +36,10 @@ export default function EventModal() {
       });
     };
 
+    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
     buttonEl?.addEventListener("click", handleClick);
 
-    return () => {
-      buttonEl?.removeEventListener("click", handleClick);
-    };
+    return () => buttonEl?.removeEventListener("click", handleClick);
   }, [router]);
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
