@@ -21,6 +21,8 @@ export async function create_group(formData: FormData) {
     data: {
       name,
       users: {
+        // Our list of users is an array of clerk IDs, so we need to connect
+        // them to the group by using the clerkId field
         connect: users.map((userId) => ({ clerkId: userId })),
       },
     },

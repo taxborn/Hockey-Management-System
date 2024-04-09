@@ -1,7 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "./_components/Navbar";
 import "./globals.css";
-import { inter } from "@/app/_components/fonts";
 
 export default function RootLayout({
   children,
