@@ -13,14 +13,14 @@ export async function create_event(formData: FormData) {
   const end = formData.get("end") as string;
 
   const user = await currentUser();
-  const dbUser = await prisma.user.findFirst({
+  const dbUser = await prisma.users.findFirst({
     where: { clerkId: user?.id },
   });
   const organizerId = dbUser?.id || 1; // Default to 1 if the user isn't in the database
 
   const MILLISECONDS_IN_A_DAY = 60 * 60 * 24 * 1000;
 
-  const event = await prisma.event.create({
+  const event = await prisma.events.create({
     data: {
       name,
       description,
@@ -35,6 +35,7 @@ export async function create_event(formData: FormData) {
       end_date: end ? new Date(end) : null,
       color,
       organizerId,
+      // TODO: Add a group ID here
     },
   });
 

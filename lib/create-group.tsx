@@ -7,7 +7,7 @@ export async function create_group(formData: FormData) {
   // We now have a list of IDs
   const users = formData.getAll("users") as string[];
 
-  const group = await prisma.group.create({
+  const group = await prisma.userGroups.create({
     data: {
       name,
       users: {

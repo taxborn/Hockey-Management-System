@@ -48,8 +48,10 @@ model Events {
   start_date  DateTime
   end_date    DateTime? // Optional end date, if the event is a single day event this will be null
   location    String
+  // Link the event to the user who created it
   organizerId Int
-  groupId     Int
   organizer   Users      @relation(fields: [organizerId], references: [id])
-  group       UserGroups @relation(fields: [groupId], references: [id])
+  // Link the event to the group it belongs to if any
+  groupId     Int?
+  group       UserGroups? @relation(fields: [groupId], references: [id])
 }
