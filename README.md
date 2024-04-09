@@ -5,7 +5,7 @@ tbd.
 ## Getting Started
 
 First, you will need credentials from [clerk.com](https://clerk.com), the `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-and the `CLERK_SECRET_KEY`. Copy the file `.env.example` to `.env.local`, and fill it in with the credentials
+and the `CLERK_SECRET_KEY`. Copy the file `.env.example` to `.env`, and fill it in with the credentials
 from the **API Keys** section of your Clerk application.
 
 Then, you can install the packages using the command in your terminal:
@@ -19,6 +19,7 @@ Then, run the development server:
 ```bash
 npm run dev
 ```
+*npm, yarn, and pnpm may be used here, however was only tested with npm.*
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -28,4 +29,4 @@ To keep the folder structure clean, we opted to put components into a [private f
 
 ## Credits
 
-This project was started by another project group from [MNSU's Computer Science Program](). Their work can be found on GitHub: [Cole-Harp/MNSU-Hockey-Management-App](https://github.com/Cole-Harp/MNSU-Hockey-Management-App).
+This project was started by another project group from [MNSU's Computer Science Program](https://cset.mnsu.edu/cs). Their work can be found on GitHub: [Cole-Harp/MNSU-Hockey-Management-App](https://github.com/Cole-Harp/MNSU-Hockey-Management-App).
