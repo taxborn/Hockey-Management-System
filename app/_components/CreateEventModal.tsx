@@ -27,10 +27,17 @@ export default function CreateEventModal() {
         modal.hide();
       });
 
-      submitButton?.addEventListener("click", () => {
+      submitButton?.addEventListener("click", (clickEvent) => {
+        // If the form is not valid, don't do anything
+        if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+      // Prevent the form from submitting, we'll handle it ourselves
+      clickEvent.preventDefault();
+
         const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
+        console.log(event)
         modal.hide();
         router.push("/home/calendar");
       });
@@ -43,11 +50,11 @@ export default function CreateEventModal() {
   }, [router]);
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
-  const [allDay, setAllDay] = useState(true);
+  const [isAllDayEvent, setAllDayEvent] = useState(true);
 
   // This function will be called when the user checks or unchecks the box
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setAllDay(event.target.checked);
+    setAllDayEvent(event.target.checked);
 
   return (
     <>
@@ -172,7 +179,7 @@ export default function CreateEventModal() {
                 <div className="flex items-center mb-4">
                   <input
                     id="all-day"
-                    checked={allDay}
+                    checked={isAllDayEvent}
                     onChange={handleCheckboxChange}
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -190,19 +197,18 @@ export default function CreateEventModal() {
                     htmlFor="start"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    {allDay ? "Date" : "Start Date"}
+                    {isAllDayEvent ? "Date" : "Start Date"}
                   </label>
                   <input
-                    type={allDay ? "date" : "datetime-local"}
+                    type={isAllDayEvent ? "date" : "datetime-local"}
                     name="start"
                     id="start"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Brensen Arena"
                     required
                   />
                 </div>
 
-                <div className={allDay ? "hidden" : ""}>
+                <div className={isAllDayEvent ? "hidden" : ""}>
                   <label
                     htmlFor="end"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -215,7 +221,7 @@ export default function CreateEventModal() {
                     id="end"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                     placeholder="Brensen Arena"
-                    required
+                    required={!isAllDayEvent}
                   />
                 </div>
 

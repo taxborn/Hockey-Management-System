@@ -39,11 +39,23 @@ export default function HockeyCalendar({ events, role }: Props) {
       '[type="submit"]',
     ) as HTMLElement;
 
+    // Set the date of the event to the date the user clicked on
+    const dateElement = document.querySelector(
+      '#start',
+    ) as HTMLInputElement;
+    dateElement.value = arg.dateStr;
+
     modal.show();
 
     // Add event listeners to the close and submit buttons
     closeEl?.addEventListener("click", () => modal.hide());
-    submitButton?.addEventListener("click", () => {
+    submitButton?.addEventListener("click", (clickEvent) => {
+      // If the form is not valid, don't do anything
+      if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+      // Prevent the form from submitting, we'll handle it ourselves
+      clickEvent.preventDefault();
+
       const formData = new FormData(
         modalEl!.querySelector("form") as HTMLFormElement,
       );
@@ -76,6 +88,7 @@ export default function HockeyCalendar({ events, role }: Props) {
         eventContent={renderEventContent}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
+        eventOrderStrict={true}
       />
     </>
   );
