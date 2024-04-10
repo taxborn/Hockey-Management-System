@@ -8,7 +8,7 @@ import { currentUser } from "@clerk/nextjs";
 
 export default async function Page() {
   const chats = await prisma.chats.findMany({
-    orderBy: { createdAt: "asc" },
+    orderBy: { createdAt: "desc" },
     include: { sender: true },
   });
 
@@ -19,9 +19,8 @@ export default async function Page() {
 
   return (
     <>
-      <h2>Messages</h2>
-      <MessageBox userId={user!.id} />
       <Messages chats={chats} />
+      <MessageBox userId={user!.id} />
     </>
   );
 }

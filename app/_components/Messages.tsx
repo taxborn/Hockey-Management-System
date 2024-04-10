@@ -4,14 +4,21 @@ import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import { useAuth } from "@clerk/nextjs";
 
-interface Props {
-  chats: ({ sender: { id: number; clerkId: string; roleId: number } } & {
+type Chat = {
+  sender: {
     id: number;
-    message: string;
-    senderId: number;
-    groupId: number | null;
-    createdAt: Date;
-  })[];
+    clerkId: string;
+    roleId: number;
+  };
+  id: number;
+  message: string;
+  senderId: number;
+  groupId: number | null;
+  createdAt: Date;
+};
+
+interface Props {
+  chats: Chat[];
 }
 
 export default function Messages({ chats }: Props) {
@@ -32,14 +39,21 @@ export default function Messages({ chats }: Props) {
 
   return (
     <>
-      <ul>
-        {chats.map((chat) => (
-          <li key={chat.id}>
-            (ID: {chat.senderId}) {chat.message}
+      <ul className="bg-white overflow-y-scroll max-h-[75vh] flex flex-col-reverse">
+        {chats.map((chat, index) => (
+          <li
+            key={chat.id}
+            className={`py-1 ${index % 2 === 1 ? "bg-purple-50" : "bg-purple-100"}`}
+          >
+            (ID: {chat.senderId}) {chat.message} (
+            {chat.createdAt.toLocaleTimeString()})
           </li>
         ))}
         {messages.map((message, index) => (
-          <li key={index}>
+          <li
+            key={index}
+            className={`py-1 ${index % 2 === 1 ? "bg-purple-50" : "bg-purple-100"}`}
+          >
             (ID: {userId}){message}
           </li>
         ))}
