@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { create_group } from "@/lib/create-group";
 import { Modal } from "flowbite";
 
-
 interface Props {
   users: CustomUser[];
 }
