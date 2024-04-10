@@ -1,38 +1,27 @@
-"use client";
+"use server";
 
-import React, { useEffect, useState } from "react";
-import Pusher from "pusher-js";
+import React from "react";
+import prisma from "@/lib/turso";
+import MessageBox from "@/app/_components/MessageBox";
+import Messages from "@/app/_components/Messages";
+import { currentUser } from "@clerk/nextjs";
 
-// Only log to console in development
-Pusher.logToConsole = process.env.NODE_ENV !== "production";
+export default async function Page() {
+  const chats = await prisma.chats.findMany({
+    orderBy: { createdAt: "asc" },
+    include: { sender: true },
+  });
 
-const pusher = new Pusher(process.env.PUSHER_KEY || "", {
-  cluster: process.env.PUSHER_CLUSTER || "",
-});
-
-export default function Page() {
-  const [messages, setMessages] = useState([] as string[]);
-
-  useEffect(() => {
-    const channel = pusher.subscribe("chat-channel");
-
-    channel.bind("chat", function (data: string) {
-      setMessages([...messages, data]);
-    });
-
-    return () => {
-      pusher.unsubscribe("chat-channel");
-    };
-  }, [messages]);
+  const clerkUser = await currentUser();
+  const user = await prisma.users.findFirst({
+    where: { clerkId: clerkUser!.id },
+  });
 
   return (
     <>
       <h2>Messages</h2>
-      <ul>
-        {messages.map((message, index) => (
-          <li key={index}>{message}</li>
-        ))}
-      </ul>
+      <MessageBox userId={user?.id} />
+      <Messages chats={chats} />
     </>
   );
 }

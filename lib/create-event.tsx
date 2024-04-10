@@ -12,9 +12,8 @@ export async function create_event(formData: FormData) {
   const start = formData.get("start") as string;
   const end = formData.get("end") as string;
 
-  const user = await currentUser();
   const dbUser = await prisma.users.findFirst({
-    where: { clerkId: user?.id },
+    where: { clerkId: (await currentUser())?.id },
   });
   const organizerId = dbUser?.id || 1; // Default to 1 if the user isn't in the database
 

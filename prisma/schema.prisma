@@ -22,21 +22,23 @@ model Users {
   role    Roles        @relation(fields: [roleId], references: [id])
   Event   Events[]
   Group   UserGroups[] // Allow a user to be in multiple groups
+  chat    Chats[]
 }
 
 // The `Role` model defines the role type, there are three roles: admin, staff, and player
 model Roles {
   id    Int     @id @default(autoincrement())
-  name  String
+  name  String  @unique
   users Users[]
 }
 
 // The `Group` model defines the group type, a group is a collection of users
 model UserGroups {
   id     Int      @id @default(autoincrement())
-  name   String
+  name   String  @unique
   users  Users[]
   events Events[]
+  chats  Chats[]
 }
 
 // The `Event` model defines the event type, used in the calendar
@@ -47,11 +49,21 @@ model Events {
   description String?
   start_date  DateTime
   end_date    DateTime? // Optional end date, if the event is a single day event this will be null
-  location    String
+  location    String?
   // Link the event to the user who created it
   organizerId Int
   organizer   Users      @relation(fields: [organizerId], references: [id])
   // Link the event to the group it belongs to if any
   groupId     Int?
   group       UserGroups? @relation(fields: [groupId], references: [id])
+}
+
+model Chats {
+  id        Int      @id @default(autoincrement())
+  message   String
+  senderId  Int
+  sender    Users    @relation(fields: [senderId], references: [id])
+  groupId   Int?
+  group     UserGroups? @relation(fields: [groupId], references: [id])
+  createdAt DateTime @default(now())
 }
