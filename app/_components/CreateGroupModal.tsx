@@ -5,17 +5,9 @@ import { useRouter } from "next/navigation";
 import { create_group } from "@/lib/create-group";
 import { Modal } from "flowbite";
 
-type User = {
-  id: string;
-  email: string;
-  lastSignin: number | null;
-  firstName: string | null;
-  public: UserPublicMetadata;
-  lastName: string | null;
-};
 
 interface Props {
-  users: User[];
+  users: CustomUser[];
 }
 
 export default function CreateGroupModal({ users }: Props) {
@@ -142,8 +134,8 @@ export default function CreateGroupModal({ users }: Props) {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     {users.map((user) => (
-                      <option value={user.id} key={user.id}>
-                        {user.firstName} {user.lastName}
+                      <option value={user.clerkId} key={user.clerkId}>
+                        {user.name}
                       </option>
                     ))}
                   </select>

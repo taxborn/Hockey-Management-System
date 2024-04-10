@@ -18,7 +18,7 @@ datasource db {
 model Users {
   id      Int          @id @default(autoincrement())
   clerkId String       @unique
-  roleId  Int
+  roleId  Int          @default(3)
   role    Roles        @relation(fields: [roleId], references: [id])
   Event   Events[]
   Group   UserGroups[] // Allow a user to be in multiple groups

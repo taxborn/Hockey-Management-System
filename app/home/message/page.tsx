@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import Pusher from 'pusher-js';
-import { randomBytes } from 'crypto';
+import React, { useEffect, useState } from "react";
+import Pusher from "pusher-js";
+import { randomBytes } from "crypto";
 
 Pusher.logToConsole = true;
 
@@ -14,16 +14,16 @@ export default function Page() {
   const [messages, setMessages] = useState([] as string[]);
 
   useEffect(() => {
-    const channel = pusher.subscribe('chat-channel');
+    const channel = pusher.subscribe("chat-channel");
 
-    channel.bind('chat', function (data: string) {
-      setMessages([...messages, data])
+    channel.bind("chat", function (data: string) {
+      setMessages([...messages, data]);
     });
 
     console.log(messages);
 
     return () => {
-      pusher.unsubscribe('chat-channel');
+      pusher.unsubscribe("chat-channel");
     };
   }, [messages]);
 
@@ -32,7 +32,7 @@ export default function Page() {
       <h2>Messages</h2>
       <ul>
         {messages.map((message) => (
-          <li key={randomBytes(16).join('')}>{message}</li>
+          <li key={randomBytes(16).join("")}>{message}</li>
         ))}
       </ul>
     </>

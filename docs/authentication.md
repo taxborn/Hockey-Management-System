@@ -1,10 +1,13 @@
 # How Authentication Works
+
 Authentication is provided by [Clerk](https://clerk.com), which handles the creation and management of users.
 
 ## Cost
+
 We are well within the free-tier of Clerk (~10k monthly active users). There are several pro features, such as removing branding and limiting sign-ups to `@mnsu.edu` emails. We decided not to opt for these features this semester.
 
 ## Getting information
+
 There are two ways we can interact with Clerk.
 
 1. The Next.js package (@clerk/nextjs)
