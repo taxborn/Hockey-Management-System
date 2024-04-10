@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import Pusher from "pusher-js";
-import { randomBytes } from "crypto";
 
-Pusher.logToConsole = true;
+// Only log to console in development
+Pusher.logToConsole = process.env.NODE_ENV !== "production";
 
-const pusher = new Pusher("a36faa8b9371d03f341f" || "", {
-  cluster: process.env.PUSHER_CLUSTER || "us2",
+const pusher = new Pusher(process.env.PUSHER_KEY || "", {
+  cluster: process.env.PUSHER_CLUSTER || "",
 });
 
 export default function Page() {
@@ -20,8 +20,6 @@ export default function Page() {
       setMessages([...messages, data]);
     });
 
-    console.log(messages);
-
     return () => {
       pusher.unsubscribe("chat-channel");
     };
@@ -31,8 +29,8 @@ export default function Page() {
     <>
       <h2>Messages</h2>
       <ul>
-        {messages.map((message) => (
-          <li key={randomBytes(16).join("")}>{message}</li>
+        {messages.map((message, index) => (
+          <li key={index}>{message}</li>
         ))}
       </ul>
     </>
