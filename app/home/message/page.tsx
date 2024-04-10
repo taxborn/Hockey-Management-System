@@ -20,7 +20,7 @@ export default async function Page() {
   return (
     <>
       <h2>Messages</h2>
-      <MessageBox userId={user?.id} />
+      <MessageBox userId={user!.id} />
       <Messages chats={chats} />
     </>
   );
