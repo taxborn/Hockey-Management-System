@@ -39,7 +39,7 @@ export default function Messages({ chats }: Props) {
 
   return (
     <>
-      <ul className="bg-white overflow-y-scroll max-h-[75vh] flex flex-col-reverse">
+      <ul className="bg-white overflow-y-scroll max-h-[60vh] sm:max-h-[75vh] flex flex-col-reverse">
         {chats.map((chat, index) => (
           <li
             key={chat.id}
