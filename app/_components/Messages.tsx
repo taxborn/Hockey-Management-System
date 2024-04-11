@@ -3,13 +3,10 @@
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 import { useAuth } from "@clerk/nextjs";
+import { Users } from "@prisma/client";
 
 type Chat = {
-  sender: {
-    id: number;
-    clerkId: string;
-    roleId: number;
-  };
+  sender: Users;
   id: number;
   message: string;
   senderId: number;
@@ -23,7 +20,7 @@ interface Props {
 
 export default function Messages({ chats }: Props) {
   const { userId } = useAuth();
-  const [messages, setMessages] = useState([] as string[]);
+  const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
     pusherClient.subscribe("chat-channel");

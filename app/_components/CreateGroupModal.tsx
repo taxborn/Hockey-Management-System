@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { create_group } from "@/lib/create-group";
+import { create_group } from "@/lib/manage-group";
 import { Modal } from "flowbite";
 
 interface Props {

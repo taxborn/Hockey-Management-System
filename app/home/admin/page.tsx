@@ -1,8 +1,8 @@
 import { Clerk } from "@clerk/backend";
-import { Users } from "@prisma/client";
 import UserSelection from "@/app/_components/UserSelection";
 import CreateGroupModal from "@/app/_components/CreateGroupModal";
 import prisma from "@/lib/turso";
+import GroupList from "@/app/_components/GroupList";
 
 const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
@@ -51,7 +51,8 @@ export default async function Page() {
       lastSignIn: clerkUser!.lastSignInAt,
     };
   });
-  const groups = await prisma.userGroups.findMany();
+
+  const groups = await prisma.userGroups.findMany({ include: { users: true } });
 
   return (
     <>
@@ -61,15 +62,8 @@ export default async function Page() {
 
       <h2 className="text-2xl">Groups</h2>
       <CreateGroupModal users={users} />
-      {/* List all of the groups */}
-      <ul>
-        {groups.length == 0 && <p>No groups</p>}
 
-        {/* TODO: Create a table and list all users within group */}
-        {groups.map((group) => (
-          <li key={group.id}>{group.name} ()</li>
-        ))}
-      </ul>
+      {groups.length == 0 ? <p>No groups</p> : <GroupList groups={groups} users={users} />}
 
       <h2 className="text-2xl">Permissions</h2>
     </>
