@@ -37,7 +37,18 @@ export default function GroupList({ groups, users }: Params) {
                 >
                   {group.name}
                 </th>
-                <td className="px-6 py-4">{group.users.map(user => users.find((aw) => aw.clerkId == user.clerkId)!.name).join(', ')}</td>
+                <td className="px-6 py-4">
+                  {group.users
+                    .map(
+                      // Since only the Clerk user object has the name, we need to find the corresponding
+                      // Clerk user object for each user in the group, searching by the Clerk ID that we
+                      // store in our database.
+                      // We then want to map the list of names to a single string, so we use join(", ")
+                      (user) =>
+                        users.find((customUserType) => customUserType.clerkId == user.clerkId)!.name,
+                    )
+                    .join(", ")}
+                </td>
                 <td className="px-6 py-4">
                   <a
                     href="#"
@@ -47,7 +58,7 @@ export default function GroupList({ groups, users }: Params) {
                   </a>
                   <a
                     href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-1"
+                    className="font-bold text-red-600 dark:text-blue-500 hover:underline ml-4 border border-red-600 px-2 py-1 rounded"
                   >
                     Delete
                   </a>

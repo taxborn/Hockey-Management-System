@@ -63,7 +63,11 @@ export default async function Page() {
       <h2 className="text-2xl">Groups</h2>
       <CreateGroupModal users={users} />
 
-      {groups.length == 0 ? <p>No groups</p> : <GroupList groups={groups} users={users} />}
+      {groups.length == 0 ? (
+        <p>No groups</p>
+      ) : (
+        <GroupList groups={groups} users={users} />
+      )}
 
       <h2 className="text-2xl">Permissions</h2>
     </>
