@@ -44,6 +44,7 @@ export default async function Page() {
     );
 
     return {
+      id: user.id,
       clerkId: user.clerkId,
       role: user.role.name,
       name: `${clerkUser!.firstName} ${clerkUser?.lastName}`,

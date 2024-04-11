@@ -16,9 +16,10 @@ type Chat = {
 
 interface Props {
   chats: Chat[];
+  users: CustomUser[];
 }
 
-export default function Messages({ chats }: Props) {
+export default function Messages({ chats, users }: Props) {
   const { userId } = useAuth();
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -36,14 +37,21 @@ export default function Messages({ chats }: Props) {
 
   return (
     <>
-      <ul className="bg-white overflow-y-scroll max-h-[60vh] sm:max-h-[75vh] flex flex-col-reverse">
+      <ul className="bg-white overflow-y-scroll max-h-[60vh] sm:max-h-[75vh] flex flex-col-reverse rounded">
         {chats.map((chat, index) => (
           <li
             key={chat.id}
-            className={`py-1 ${index % 2 === 1 ? "bg-purple-50" : "bg-purple-100"}`}
+            className={`py-1 px-1 ${index % 2 === 1 ? "bg-purple-50" : "bg-purple-100"}`}
           >
-            (ID: {chat.senderId}) {chat.message} (
-            {chat.createdAt.toLocaleTimeString()})
+            <div>
+              <span className="font-bold">
+                {users.find((user) => user.id == chat.senderId)!.name}
+              </span>{" "}
+              <span className="text-xs italic text-gray-600">
+                ({chat.createdAt.toLocaleTimeString()})
+              </span>
+            </div>
+            <p>{chat.message}</p>
           </li>
         ))}
         {messages.map((message, index) => (
@@ -51,7 +59,7 @@ export default function Messages({ chats }: Props) {
             key={index}
             className={`py-1 ${index % 2 === 1 ? "bg-purple-50" : "bg-purple-100"}`}
           >
-            (ID: {userId}){message}
+            ({users.find((user) => user.clerkId == userId)!.name}){message}
           </li>
         ))}
       </ul>

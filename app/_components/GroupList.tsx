@@ -45,7 +45,9 @@ export default function GroupList({ groups, users }: Params) {
                       // store in our database.
                       // We then want to map the list of names to a single string, so we use join(", ")
                       (user) =>
-                        users.find((customUserType) => customUserType.clerkId == user.clerkId)!.name,
+                        users.find(
+                          (clerkUser) => clerkUser.clerkId == user.clerkId,
+                        )!.name,
                     )
                     .join(", ")}
                 </td>
