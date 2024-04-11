@@ -15,6 +15,9 @@ export default function Page({ userId }: Props) {
     document.querySelector("input")!.value = "";
 
     await axios.post("/api/message", { text, senderId: userId });
+
+    // Clear the message variable
+    message = "";
   };
 
   return (

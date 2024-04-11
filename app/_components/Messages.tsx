@@ -24,16 +24,16 @@ export default function Messages({ chats, users }: Props) {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    pusherClient.subscribe("chat-channel");
+    pusherClient.subscribe(process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!);
     console.log("HERE");
 
-    pusherClient.bind("chat", (text: string) => {
+    pusherClient.bind(process.env.NEXT_PUBLIC_PUSHER_CHAT_EVENT!, (text: string) => {
       setMessages([...messages, text]);
       console.log("AHHHHHHHHHHHHHHHHHHHH THIS DID HAPPEN");
     });
 
     return () => {
-      pusherClient.unsubscribe("chat-channel");
+      pusherClient.unsubscribe(process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!);
     };
   }, [messages]);
 
