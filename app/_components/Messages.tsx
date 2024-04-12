@@ -27,10 +27,13 @@ export default function Messages({ chats, users }: Props) {
     pusherClient.subscribe(process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!);
     console.log("HERE");
 
-    pusherClient.bind(process.env.NEXT_PUBLIC_PUSHER_CHAT_EVENT!, (text: string) => {
-      setMessages([...messages, text]);
-      console.log("AHHHHHHHHHHHHHHHHHHHH THIS DID HAPPEN");
-    });
+    pusherClient.bind(
+      process.env.NEXT_PUBLIC_PUSHER_CHAT_EVENT!,
+      (text: string) => {
+        setMessages([...messages, text]);
+        console.log("AHHHHHHHHHHHHHHHHHHHH THIS DID HAPPEN");
+      },
+    );
 
     return () => {
       pusherClient.unsubscribe(process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!);
@@ -59,7 +62,7 @@ export default function Messages({ chats, users }: Props) {
         {messages.map((message, index) => (
           <li
             // We need to add the length of the chats array to the key to avoid conflicts
-            // between the messages from the database and the messages from Pusher. 
+            // between the messages from the database and the messages from Pusher.
             // This is probably not the best solution.
             key={chats.length + index}
             className={`p-1`}

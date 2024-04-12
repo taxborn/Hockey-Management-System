@@ -13,13 +13,15 @@ import {
   EventInput,
 } from "@fullcalendar/core/index.js";
 import CreateEventModal from "./CreateEventModal";
+import { UserGroups } from "@prisma/client";
 
 interface Props {
   events: EventInput[];
   role: String;
+  groups: UserGroups[];
 }
 
-export default function HockeyCalendar({ events, role }: Props) {
+export default function HockeyCalendar({ events, role, groups }: Props) {
   const router = useRouter();
 
   // TODO: Check for date creation permissions
@@ -76,7 +78,7 @@ export default function HockeyCalendar({ events, role }: Props) {
   return (
     <>
       {/* Only render if the user is not a player role */}
-      {role != "Player" ? <CreateEventModal /> : null}
+      {role != "Player" ? <CreateEventModal groups={groups} /> : null}
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
