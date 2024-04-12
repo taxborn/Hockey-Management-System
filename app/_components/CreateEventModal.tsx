@@ -42,7 +42,17 @@ export default function CreateEventModal({ groups }: Props) {
         const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
+
         modal.hide();
+        // Clear the form
+        modalEl.querySelector("form")?.reset();
+
+        // Remove the div with the attribute modal-backgrop
+        const modalBackdrop = document.querySelector(
+          "[modal-backdrop]",
+        ) as HTMLElement;
+        if (modalBackdrop) modalBackdrop.style.display = "none";
+
         router.push("/home/calendar");
       });
     };

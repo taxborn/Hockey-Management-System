@@ -63,9 +63,17 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
       // and close the modal
       const event = create_calendar_event(formData);
 
-      router.push("/home/calendar");
-
       modal.hide();
+      // Clear the form
+      modalEl.querySelector("form")?.reset();
+
+      // Remove the div with the attribute modal-backgrop
+      const modalBackdrop = document.querySelector(
+        "[modal-backdrop]",
+      ) as HTMLElement;
+      if (modalBackdrop) modalBackdrop.style.display = "none";
+
+      router.push("/home/calendar");
     });
   };
 
