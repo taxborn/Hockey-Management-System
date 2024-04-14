@@ -10,7 +10,9 @@ export async function POST(req: NextRequest) {
 
   const prismaUser = await prisma.users.findFirst({ where: { id: senderId } });
   const clerkUserList = await clerk.users.getUserList();
-  const clerkUser = clerkUserList.find((user) => user.id === prismaUser?.clerkId);
+  const clerkUser = clerkUserList.find(
+    (user) => user.id === prismaUser?.clerkId,
+  );
   // console.log("Trying to find user with id: " + senderId);
   const fullName = `${clerkUser!.firstName} ${clerkUser!.lastName}`;
   const now = new Date().toLocaleTimeString();

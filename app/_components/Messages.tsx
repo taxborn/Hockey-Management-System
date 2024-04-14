@@ -47,13 +47,11 @@ export default function Messages({ chats, users }: Props) {
             // We need to add the length of the chats array to the key to avoid conflicts
             // between the messages from the database and the messages from Pusher.
             // This is probably not the best solution.
-            key={chats.length + index}
+            key={chats.length + index + 1}
             className={`p-1 odd:bg-purple-50 even:bg-purple-100`}
           >
             <div>
-              <span className="font-bold">
-                {message[1]}
-              </span>{" "}
+              <span className="font-bold">{message[1]}</span>{" "}
               <span className="text-xs italic text-gray-600">
                 ({message[2]}) (#{chats.length + index + 1})
               </span>
@@ -78,7 +76,6 @@ export default function Messages({ chats, users }: Props) {
             <p>{chat.message}</p>
           </li>
         ))}
-
       </ul>
     </>
   );

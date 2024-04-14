@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { create_event } from "@/lib/create-event";
-import { Modal } from "flowbite";
 import { UserGroups } from "@prisma/client";
+import { handleEventCreation } from "@/lib/shared";
 
 interface Props {
   groups: UserGroups[];
@@ -14,53 +13,12 @@ export default function CreateEventModal({ groups }: Props) {
   const router = useRouter();
 
   useEffect(() => {
-    const handleClick = () => {
-      const closeEl = document.querySelector(
-        '[data-modal-hide="authentication-modal"]',
-      ) as HTMLElement;
-      const submitButton = document.querySelector(
-        '[type="submit"]',
-      ) as HTMLElement;
-      const modalEl = document.querySelector(
-        "#authentication-modal",
-      ) as HTMLElement;
-      const modal = new Modal(modalEl);
-
-      modal.show();
-
-      closeEl?.addEventListener("click", () => {
-        modal.hide();
-      });
-
-      submitButton?.addEventListener("click", (clickEvent) => {
-        // If the form is not valid, don't do anything
-        if (!modalEl?.querySelector("form")?.checkValidity()) return;
-
-        // Prevent the form from submitting, we'll handle it ourselves
-        clickEvent.preventDefault();
-
-        const event = create_event(
-          new FormData(modalEl!.querySelector("form") as HTMLFormElement),
-        );
-
-        modal.hide();
-        // Clear the form
-        modalEl.querySelector("form")?.reset();
-
-        // Remove the div with the attribute modal-backgrop
-        const modalBackdrop = document.querySelector(
-          "[modal-backdrop]",
-        ) as HTMLElement;
-        if (modalBackdrop) modalBackdrop.style.display = "none";
-
-        router.push("/home/calendar");
-      });
-    };
-
     const buttonEl = document.querySelector("#modal-button") as HTMLElement;
-    buttonEl?.addEventListener("click", handleClick);
 
-    return () => buttonEl?.removeEventListener("click", handleClick);
+    buttonEl?.addEventListener("click", () => handleEventCreation(null));
+
+    return () =>
+      buttonEl?.removeEventListener("click", () => handleEventCreation);
   }, [router]);
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
