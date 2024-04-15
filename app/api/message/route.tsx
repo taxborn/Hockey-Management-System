@@ -13,9 +13,8 @@ export async function POST(req: NextRequest) {
   const clerkUser = clerkUserList.find(
     (user) => user.id === prismaUser?.clerkId,
   );
-  // console.log("Trying to find user with id: " + senderId);
   const fullName = `${clerkUser!.firstName} ${clerkUser!.lastName}`;
-  const now = new Date().toLocaleTimeString();
+  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
 
   pusherServer.trigger(
     process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!,
@@ -25,5 +24,5 @@ export async function POST(req: NextRequest) {
 
   await prisma.chats.create({ data: { message: text, senderId } });
 
-  return NextResponse.json({ message: "Message sent" }, { status: 200 });
+  return NextResponse.json({ success: true });
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { UserGroups } from "@prisma/client";
 import { handleEventCreation } from "@/lib/shared";
 
@@ -10,16 +9,15 @@ interface Props {
 }
 
 export default function CreateEventModal({ groups }: Props) {
-  const router = useRouter();
-
   useEffect(() => {
     const buttonEl = document.querySelector("#modal-button") as HTMLElement;
+    const handleClick = () => handleEventCreation(null);
 
-    buttonEl?.addEventListener("click", () => handleEventCreation(null));
+    buttonEl?.addEventListener("click", () => handleClick);
 
     return () =>
-      buttonEl?.removeEventListener("click", () => handleEventCreation);
-  }, [router]);
+      buttonEl?.removeEventListener("click", () => handleClick);
+  });
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
   const [isAllDayEvent, setAllDayEvent] = useState(true);
