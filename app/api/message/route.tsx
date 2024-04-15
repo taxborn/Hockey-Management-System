@@ -14,7 +14,9 @@ export async function POST(req: NextRequest) {
     (user) => user.id === prismaUser?.clerkId,
   );
   const fullName = `${clerkUser!.firstName} ${clerkUser!.lastName}`;
-  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+  // Get the current time in the America/Chicago timezone, and format it to 
+  // only show the time
+  const now = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }).split(", ")[1];
 
   pusherServer.trigger(
     process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!,
