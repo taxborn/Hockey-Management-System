@@ -1,10 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Users } from "@prisma/client";
 import { PrismaLibSQL } from "@prisma/adapter-libsql";
 import { createClient } from "@libsql/client";
-
-
-
 
 const libsql = createClient({
   url: process.env.TURSO_DATABASE_URL || "",
@@ -21,7 +18,7 @@ export default async function Home() {
   // We first check if the user is in our database (not Clerk's), since
   // we need to keep track of that for roles.
   // TODO: There is probably a better name for this
-  const userObject: User | null = await prisma.user.findFirst({
+  const userObject: Users | null = await prisma.users.findFirst({
     where: {
       clerkId: user?.id,
     },
@@ -31,7 +28,7 @@ export default async function Home() {
   // TODO: It seems this Home() component is loaded twice,
   // because the console.log's come up twice.
   if (userObject == null) {
-    await prisma.user.create({
+    await prisma.users.create({
       data: {
         clerkId: user?.id || "",
         // Role ID 3 here denotes the 'player' RoleId.
@@ -45,7 +42,7 @@ export default async function Home() {
   } else {
     // TODO: Since Prisma is an ORM, it probably has a fancy function for this
     // already
-    role = await prisma.role.findFirst({
+    role = await prisma.roles.findFirst({
       where: {
         id: userObject.roleId,
       },
@@ -59,7 +56,6 @@ export default async function Home() {
       <h1 className="text-2xl font-bold">Hello, {user?.firstName}</h1>
       <p>Is the user in the DB? {userObject != null ? "yes" : "no"}.</p>
       <p>Their role: {role?.name}</p>
-      
-      </>
+    </>
   );
 }
