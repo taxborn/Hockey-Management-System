@@ -10,13 +10,12 @@ interface Props {
 
 export default function CreateEventModal({ groups }: Props) {
   useEffect(() => {
-    const buttonEl = document.querySelector("#modal-button") as HTMLElement;
-    const handleClick = () => handleEventCreation(null);
+    const buttonEl = document.querySelector<HTMLElement>("#modal-button");
 
-    buttonEl?.addEventListener("click", () => handleClick);
+    buttonEl?.addEventListener("click", () => handleEventCreation(null));
 
     return () =>
-      buttonEl?.removeEventListener("click", () => handleClick);
+      buttonEl?.removeEventListener("click", () => handleEventCreation);
   });
   // Since this is defaulted to true, the event will be an all-day event
   // If the user unchecks the box, we will show the end date input
@@ -32,7 +31,6 @@ export default function CreateEventModal({ groups }: Props) {
         data-modal-target="authentication-modal"
         id="modal-button"
         data-modal-toggle="authentication-modal"
-        // TODO: This is a hacky way to hide the button if the user is an admin, replace with a proper check
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
       >

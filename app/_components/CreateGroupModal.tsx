@@ -16,13 +16,12 @@ export default function CreateGroupModal({ users }: Props) {
     const buttonEl = document.querySelector("#modal-button") as HTMLElement;
 
     const handleClick = () => {
-      const closeEl = document.querySelector(
+      const closeEl = document.querySelector<HTMLElement>(
         '[data-modal-hide="group-modal"]',
-      ) as HTMLElement;
-      const submitButton = document.querySelector(
-        '[type="submit"]',
-      ) as HTMLElement;
-      const modalEl = document.querySelector("#group-modal") as HTMLElement;
+      );
+      const submitButton =
+        document.querySelector<HTMLElement>('[type="submit"]');
+      const modalEl = document.querySelector<HTMLElement>("#group-modal");
       const modal = new Modal(modalEl);
 
       modal.show();
@@ -32,7 +31,7 @@ export default function CreateGroupModal({ users }: Props) {
       });
 
       submitButton?.addEventListener("click", () => {
-        const group = create_group(
+        create_group(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
         router.push("/home/admin");
@@ -125,13 +124,13 @@ export default function CreateGroupModal({ users }: Props) {
                       (hold down ctrl to select multiple users at once)
                     </i>
                   </label>
-                  {/* List of users, iterate over the users map */}
                   <select
                     id="users"
                     name="users"
                     multiple={true}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
+                  {/* List of users, iterate over the users map */}
                     {users.map((user) => (
                       <option value={user.clerkId} key={user.clerkId}>
                         {user.name}
