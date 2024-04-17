@@ -3,7 +3,8 @@ import prisma from "@/lib/turso";
 
 export default async function Home() {
   // Role ID 3 here denotes the 'player' RoleId and is the default role for all new users.
-  const PLAYER_ROLE_ID = 3;
+  // TODO: Revert back to 3, this allows all new users to be admins for the time being
+  const PLAYER_ROLE_ID = 1;
 
   const user = await currentUser();
 

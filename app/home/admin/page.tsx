@@ -8,7 +8,8 @@ const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
 export default async function Page() {
   // Role ID 3 here denotes the 'player' RoleId and is the default role for all new users.
-  const PLAYER_ROLE_ID = 3;
+  // TODO: Revert back to 3, this allows all new users to be admins for the time being
+  const PLAYER_ROLE_ID = 1;
   const clerkUserList = await clerk.users.getUserList();
   const count = await clerk.users.getCount();
 
@@ -47,7 +48,7 @@ export default async function Page() {
       id: user.id,
       clerkId: user.clerkId,
       role: user.role.name,
-      name: `${clerkUser!.firstName} ${clerkUser?.lastName}`,
+      name: `${clerkUser!.firstName} ${clerkUser!.lastName}`,
       emailAddress: clerkUser!.emailAddresses[0].emailAddress,
       lastSignIn: clerkUser!.lastSignInAt,
     };

@@ -42,7 +42,7 @@ export default function Messages({ chats, users }: Props) {
   return (
     <>
       <ul className="bg-white  overflow-y-scroll max-h-[60vh] sm:max-h-[75vh] flex flex-col-reverse rounded">
-        {messages.reverse().map((message, index) => (
+        {messages.map((message, index) => (
           <li
             // We need to add the length of the chats array to the key to avoid conflicts
             // between the messages from the database and the messages from Pusher.
