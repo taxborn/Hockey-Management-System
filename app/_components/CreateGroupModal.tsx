@@ -31,8 +31,14 @@ export default function CreateGroupModal({ users }: Props) {
         modal.hide();
       });
 
-      submitButton?.addEventListener("click", () => {
-        const group = create_group(
+      submitButton?.addEventListener("click", (clickEvent) => {
+        // If the form is not valid, don't do anything
+        if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+        // Prevent the form from submitting, we'll handle it ourselves
+        clickEvent.preventDefault();
+
+        create_group(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
         router.push("/home/admin");
@@ -131,6 +137,7 @@ export default function CreateGroupModal({ users }: Props) {
                     name="users"
                     multiple={true}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
                   >
                     {users.map((user) => (
                       <option value={user.clerkId} key={user.clerkId}>

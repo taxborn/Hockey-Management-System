@@ -1,3 +1,4 @@
+import { delete_group } from "@/lib/manage-group";
 import { UserGroups, Users } from "@prisma/client";
 
 interface Params {
@@ -59,7 +60,7 @@ export default function GroupList({ groups, users }: Params) {
                     Edit
                   </a>
                   <a
-                    href="#"
+                    href={`/api/group?id=${group.id}`}
                     className="font-bold text-red-600 dark:text-blue-500 hover:underline ml-4 border border-red-600 px-2 py-1 rounded"
                   >
                     Delete
