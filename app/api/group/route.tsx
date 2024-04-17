@@ -2,7 +2,7 @@ import prisma from "@/lib/turso";
 import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: Request) {
     // Get the id from the query string
     const url = req?.url || "";
     if (url === "") {
