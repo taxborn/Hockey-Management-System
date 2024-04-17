@@ -1,79 +1,75 @@
-"use server";
-
 import { Clerk } from "@clerk/backend";
-import { Users } from "@prisma/client";
 import UserSelection from "@/app/_components/UserSelection";
 import CreateGroupModal from "@/app/_components/CreateGroupModal";
 import prisma from "@/lib/turso";
+import GroupList from "@/app/_components/GroupList";
 
 const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
 export default async function Page() {
-  let users = await clerk.users.getUserList();
-
-  for (let user of users) {
-    // We first check if the user is in our database (not Clerk's), since
-    // we need to keep track of that for roles.
-    // TODO: There is probably a better name for this
-    let userObject: Users | null = await prisma.users.findFirst({
-      where: {
-        clerkId: user?.id,
-      },
-    });
-
-    // If the user doesn't exist, we create them
-    if (userObject == null) {
-      userObject = await prisma.users.create({
-        data: {
-          clerkId: user?.id || "",
-          // Role ID 3 here denotes the 'player' RoleId.
-          role: {
-            connect: {
-              id: 3,
-            },
-          },
-        },
-      });
-    }
-  }
-
+  // Role ID 3 here denotes the 'player' RoleId and is the default role for all new users.
+  // TODO: Revert back to 3, this allows all new users to be admins for the time being
+  const PLAYER_ROLE_ID = 1;
+  const clerkUserList = await clerk.users.getUserList();
   const count = await clerk.users.getCount();
 
-  // We'll format the users to a more usable format, React doesn't like
-  // when we send the Clerk User object directly, so we'll create a plain
-  // object with the properties we need
-  const plainUsers = users.map((user) => ({
-    id: user.id,
-    email: user.emailAddresses[0].emailAddress,
-    lastSignin: user.lastSignInAt,
-    phone: user.phoneNumbers,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    public: user.publicMetadata,
-  }));
+  clerkUserList.map(async (user) => {
+    // We first check if the user is in our database (not Clerk's), since
+    // we need to keep track of that for roles and other data. We use the
+    // upsert method to create the user if they don't exist,
+    await prisma.users.upsert({
+      where: {
+        clerkId: user!.id,
+      },
+      create: {
+        clerkId: user!.id,
+        role: {
+          connect: {
+            id: PLAYER_ROLE_ID,
+          },
+        },
+      },
+      // We don't need to update anything, but we need to provide an empty object
+      update: {},
+    });
+  });
 
-  const groups = await prisma.userGroups.findMany();
+  const prismaUsers = await prisma.users.findMany({
+    include: { role: true },
+  });
+
+  const users = prismaUsers.map((user) => {
+    // We find the Clerk user object that corresponds to the user in our database
+    const clerkUser = clerkUserList.find(
+      (clerkUser) => clerkUser.id === user.clerkId,
+    );
+
+    return {
+      id: user.id,
+      clerkId: user.clerkId,
+      role: user.role.name,
+      name: `${clerkUser!.firstName} ${clerkUser!.lastName}`,
+      emailAddress: clerkUser!.emailAddresses[0].emailAddress,
+      lastSignIn: clerkUser!.lastSignInAt,
+    };
+  });
+
+  const groups = await prisma.userGroups.findMany({ include: { users: true } });
 
   return (
     <>
-      {/* Force refresh */}
-      <p>
-        Problems? <a href="">Force refresh</a>
-      </p>
+      {/* TODO: Sometimes the role updates take FOREVER, figure out a way to force a refresh */}
       <h1 className="text-2xl">User list ({count})</h1>
-      <UserSelection users={plainUsers} />
+      <UserSelection users={users} />
 
       <h2 className="text-2xl">Groups</h2>
-      <CreateGroupModal users={plainUsers} />
-      {/* List all of the groups */}
-      <ul>
-        {groups.length == 0 && <p>No groups</p>}
+      <CreateGroupModal users={users} />
 
-        {/* TODO: Create a table and list all users within group */}
-        {groups.map((group) => (
-          <li key={group.id}>{group.name} ()</li>
-        ))}
-      </ul>
+      {groups.length == 0 ? (
+        <p>No groups</p>
+      ) : (
+        <GroupList groups={groups} users={users} />
+      )}
 
       <h2 className="text-2xl">Permissions</h2>
     </>

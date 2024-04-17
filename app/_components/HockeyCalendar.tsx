@@ -13,13 +13,15 @@ import {
   EventInput,
 } from "@fullcalendar/core/index.js";
 import CreateEventModal from "./CreateEventModal";
+import { UserGroups } from "@prisma/client";
 
 interface Props {
   events: EventInput[];
   role: String;
+  groups: UserGroups[];
 }
 
-export default function HockeyCalendar({ events, role }: Props) {
+export default function HockeyCalendar({ events, role, groups }: Props) {
   const router = useRouter();
 
   // TODO: Check for date creation permissions
@@ -61,9 +63,17 @@ export default function HockeyCalendar({ events, role }: Props) {
       // and close the modal
       const event = create_calendar_event(formData);
 
-      router.push("/home/calendar");
-
       modal.hide();
+      // Clear the form
+      modalEl.querySelector("form")?.reset();
+
+      // Remove the div with the attribute modal-backgrop
+      const modalBackdrop = document.querySelector(
+        "[modal-backdrop]",
+      ) as HTMLElement;
+      if (modalBackdrop) modalBackdrop.style.display = "none";
+
+      router.push("/home/calendar");
     });
   };
 
@@ -76,7 +86,7 @@ export default function HockeyCalendar({ events, role }: Props) {
   return (
     <>
       {/* Only render if the user is not a player role */}
-      {role != "Player" ? <CreateEventModal /> : null}
+      {role != "Player" ? <CreateEventModal groups={groups} /> : null}
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}

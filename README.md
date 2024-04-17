@@ -19,7 +19,8 @@ Then, run the development server:
 ```bash
 npm run dev
 ```
-*npm, yarn, and pnpm may be used here, however was only tested with npm.*
+
+_npm, yarn, and pnpm may be used here, however was only tested with npm._
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

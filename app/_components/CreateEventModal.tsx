@@ -4,8 +4,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { create_event } from "@/lib/create-event";
 import { Modal } from "flowbite";
+import { UserGroups } from "@prisma/client";
 
-export default function CreateEventModal() {
+interface Props {
+  groups: UserGroups[];
+}
+
+export default function CreateEventModal({ groups }: Props) {
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +42,17 @@ export default function CreateEventModal() {
         const event = create_event(
           new FormData(modalEl!.querySelector("form") as HTMLFormElement),
         );
+
         modal.hide();
+        // Clear the form
+        modalEl.querySelector("form")?.reset();
+
+        // Remove the div with the attribute modal-backgrop
+        const modalBackdrop = document.querySelector(
+          "[modal-backdrop]",
+        ) as HTMLElement;
+        if (modalBackdrop) modalBackdrop.style.display = "none";
+
         router.push("/home/calendar");
       });
     };
@@ -222,6 +237,27 @@ export default function CreateEventModal() {
                     placeholder="Brensen Arena"
                     required={!isAllDayEvent}
                   />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="color"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Group
+                  </label>
+                  <select
+                    id="group"
+                    name="group"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option>Everyone</option>
+                    {groups.map((group) => (
+                      <option key={group.id} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <button

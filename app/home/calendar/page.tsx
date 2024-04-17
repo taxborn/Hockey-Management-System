@@ -37,11 +37,17 @@ export default async function Page() {
     };
   });
 
+  const groups = await prisma.userGroups.findMany();
+
   return (
     <>
       <h1 className="text-2xl font-bold">Team Calendar</h1>
 
-      <HockeyCalendar events={calendarEvents} role={role?.name || "Player"} />
+      <HockeyCalendar
+        events={calendarEvents}
+        role={role!.name}
+        groups={groups}
+      />
     </>
   );
 }
