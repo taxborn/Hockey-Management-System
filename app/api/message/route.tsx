@@ -10,15 +10,10 @@ export async function POST(req: NextRequest) {
 
   const prismaUser = await prisma.users.findFirst({ where: { id: senderId } });
   const clerkUserList = await clerk.users.getUserList();
-  const clerkUser = clerkUserList.find(
-    (user) => user.id === prismaUser?.clerkId,
-  );
+  const clerkUser = clerkUserList.find((user) => user.id === prismaUser?.clerkId);
+  // console.log("Trying to find user with id: " + senderId);
   const fullName = `${clerkUser!.firstName} ${clerkUser!.lastName}`;
-  // Get the current time in the America/Chicago timezone, and format it to
-  // only show the time
-  const now = new Date()
-    .toLocaleString("en-US", { timeZone: "America/Chicago" })
-    .split(", ")[1];
+  const now = new Date().toLocaleTimeString();
 
   pusherServer.trigger(
     process.env.NEXT_PUBLIC_PUSHER_CHAT_CHANNEL!,
@@ -28,5 +23,5 @@ export async function POST(req: NextRequest) {
 
   await prisma.chats.create({ data: { message: text, senderId } });
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ message: "Message sent" }, { status: 200 });
 }

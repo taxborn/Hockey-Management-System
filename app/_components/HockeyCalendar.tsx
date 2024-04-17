@@ -1,8 +1,9 @@
 "use client";
 
+import { Modal } from "flowbite";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { handleEventCreation } from "@/lib/shared";
+import { create_event as create_calendar_event } from "@/lib/create-event";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
@@ -27,7 +28,53 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
   // The function that handles when a user clicks on a certain date on the calendar.
   // This should show a modal that allows the user to create an event for that date.
   const handleDateClick = (arg: DateClickArg) => {
-    handleEventCreation(arg.dateStr);
+    // Construct the modal
+    const modalEl = document.querySelector(
+      "#authentication-modal",
+    ) as HTMLElement;
+    const modal = new Modal(modalEl);
+    // Get the close button and the submit button
+    const closeEl = document.querySelector(
+      '[data-modal-hide="authentication-modal"]',
+    ) as HTMLElement;
+    const submitButton = document.querySelector(
+      '[type="submit"]',
+    ) as HTMLElement;
+
+    // Set the date of the event to the date the user clicked on
+    const dateElement = document.querySelector("#start") as HTMLInputElement;
+    dateElement.value = arg.dateStr;
+
+    modal.show();
+
+    // Add event listeners to the close and submit buttons
+    closeEl?.addEventListener("click", () => modal.hide());
+    submitButton?.addEventListener("click", (clickEvent) => {
+      // If the form is not valid, don't do anything
+      if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+      // Prevent the form from submitting, we'll handle it ourselves
+      clickEvent.preventDefault();
+
+      const formData = new FormData(
+        modalEl!.querySelector("form") as HTMLFormElement,
+      );
+      // TODO: Instead of refreshing the page, we should add the event to the calendar
+      // and close the modal
+      const event = create_calendar_event(formData);
+
+      modal.hide();
+      // Clear the form
+      modalEl.querySelector("form")?.reset();
+
+      // Remove the div with the attribute modal-backgrop
+      const modalBackdrop = document.querySelector(
+        "[modal-backdrop]",
+      ) as HTMLElement;
+      if (modalBackdrop) modalBackdrop.style.display = "none";
+
+      router.push("/home/calendar");
+    });
   };
 
   // TODO: When a user clicks an event, we should show a modal with more information
