@@ -20,3 +20,17 @@ export async function create_group(formData: FormData) {
 
   return group;
 }
+
+export async function delete_group(id: number) {
+  const deletedGroup = await prisma.userGroups.delete({
+    where: {
+      id,
+    },
+  });
+
+  if (!deletedGroup) {
+    throw new Error("Group not found");
+  }
+
+  return deletedGroup;
+}

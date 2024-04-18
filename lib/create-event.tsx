@@ -11,13 +11,12 @@ export async function create_event(formData: FormData) {
   const location = formData.get("location") as string;
   const start = formData.get("start") as string;
   const end = formData.get("end") as string;
+  const group = formData.get("group") as string;
 
-  const user = await currentUser();
   const dbUser = await prisma.users.findFirst({
-    where: { clerkId: user?.id },
+    where: { clerkId: (await currentUser())?.id },
   });
   const organizerId = dbUser?.id || 1; // Default to 1 if the user isn't in the database
-
   const MILLISECONDS_IN_A_DAY = 60 * 60 * 24 * 1000;
 
   const event = await prisma.events.create({
@@ -35,7 +34,7 @@ export async function create_event(formData: FormData) {
       end_date: end ? new Date(end) : null,
       color,
       organizerId,
-      // TODO: Add a group ID here
+      groupId: group !== "everyone" ? parseInt(group) : null,
     },
   });
 
