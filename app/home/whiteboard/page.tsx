@@ -108,7 +108,7 @@ export const CustomActionsMenu = track(() => {
 				<div style={{ backgroundColor: 'thistle' }}>
 					<TldrawUiMenuItem
 						id="hockey"
-						label="Like my posts"
+						label="Full Hockey Rink"
 						icon="external-link"
 						readonlyOk
 						onSelect={() => {
@@ -119,7 +119,7 @@ export const CustomActionsMenu = track(() => {
 				<div style={{ backgroundColor: 'thistle' }}>
 					<TldrawUiMenuItem
 						id="half"
-						label="Like my posts"
+						label="Half Hockey Rink"
 						icon="external-link"
 						readonlyOk
 						onSelect={() => {
