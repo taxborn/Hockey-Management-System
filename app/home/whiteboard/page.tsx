@@ -2,17 +2,19 @@
 
 
 
-import {  AssetRecordType, DefaultActionsMenu, DefaultActionsMenuContent, StateNode, TLComponents, Tldraw, TldrawUiMenuItem, track, useEditor } from '@tldraw/tldraw'
+import { AssetRecordType, DefaultActionsMenu, DefaultActionsMenuContent, StateNode, TLComponents, Tldraw, TldrawUiMenuItem, track, useEditor } from '@tldraw/tldraw'
 import './index.css'
 import React from 'react'
 
 class HockeyRinkTool extends StateNode {
   static override id = "hockeyrink";
 
+  // This happens when the cursor enters the editor of TlDraw
 	override onEnter = () => {
 		this.editor.setCursor({ type: 'cross', rotation: 0 })
 	}
 
+  // This happens when the user clicks on the editor
 	override onPointerDown = () => {
 		const { currentPagePoint } = this.editor.inputs
     const assetId = AssetRecordType.createId();
@@ -37,6 +39,7 @@ class HockeyRinkTool extends StateNode {
       },
     ]);
 
+    // We thought we didn't need this, we do.
     this.editor.createShape({
 			type: 'image',
 			// Let's center the image in the editor
@@ -49,6 +52,7 @@ class HockeyRinkTool extends StateNode {
 			},
 		});
 
+    // We want to reset the tool to the select tool so we don't place multiple rinks
     this.editor.setCurrentTool('select');
 	}
 }
@@ -116,6 +120,7 @@ export const CustomActionsMenu = track(() => {
 						}}
 					/>
 				</div>
+
 				<div style={{ backgroundColor: 'thistle' }}>
 					<TldrawUiMenuItem
 						id="half"
