@@ -2,34 +2,23 @@
 
 
 
-import {  AssetRecordType, Editor, StateNode, TLComponents, Tldraw,TldrawImage } from '@tldraw/tldraw'
+import {  AssetRecordType, DefaultActionsMenu, DefaultActionsMenuContent, StateNode, TLComponents, Tldraw, TldrawUiMenuItem, track, useEditor } from '@tldraw/tldraw'
 import './index.css'
-import React, { useCallback, useState } from 'react'
-
-let selected = "https://placehold.co/1000x1000.png";
-let selected_x = 1000;
-let selected_y = 1000;
-
-function CustomActionsMenu() {
-}
+import React from 'react'
 
 class HockeyRinkTool extends StateNode {
   static override id = "hockeyrink";
-	// [a]
+
 	override onEnter = () => {
 		this.editor.setCursor({ type: 'cross', rotation: 0 })
 	}
 
-	// [b]
 	override onPointerDown = () => {
 		const { currentPagePoint } = this.editor.inputs
-		// this.editor.createShape({
-		// 	type: 'text',
-		// 	x: currentPagePoint.x,
-		// 	y: currentPagePoint.y,
-		// 	props: { text: '❤️' },
-		// })
     const assetId = AssetRecordType.createId();
+    const image = "https://placehold.co/1000x1000.png"; // You could also use a base64 encoded string here;
+    const width = 1000;
+    const height = 1000;
     
     this.editor.createAssets([
       {
@@ -38,9 +27,9 @@ class HockeyRinkTool extends StateNode {
         typeName: 'asset',
         props: {
           name: 'tldraw.png',
-          src: selected, // You could also use a base64 encoded string here
-          w: selected_x,
-          h: selected_y,
+          src: image,
+          w: width,
+          h: height,
           mimeType: 'image/png',
           isAnimated: false,
         },
@@ -51,45 +40,110 @@ class HockeyRinkTool extends StateNode {
     this.editor.createShape({
 			type: 'image',
 			// Let's center the image in the editor
-			x: (currentPagePoint.x - selected_x) / 2,
-			y: (currentPagePoint.y - selected_y) / 2,
+			x: currentPagePoint.x - width / 2,
+			y: currentPagePoint.y - height / 2,
 			props: {
 				assetId,
-				w: selected_x,
-				h: selected_y,
+				w: width,
+				h: height,
 			},
-		})
+		});
+
+    this.editor.setCurrentTool('select');
 	}
 }
 
-// const components: TLComponents = {
-//   ActionsMenu: CustomActionsMenu,
-// };
+class HalfRinkTool extends StateNode {
+  static override id = "halfrink";
 
-const tools = [HockeyRinkTool];
+	override onEnter = () => {
+		this.editor.setCursor({ type: 'cross', rotation: 0 })
+	}
+
+	override onPointerDown = () => {
+		const { currentPagePoint } = this.editor.inputs
+    const assetId = AssetRecordType.createId();
+    const image = "https://placehold.co/1000x500.png"; // You could also use a base64 encoded string here;
+    const width = 1000;
+    const height = 500;
+    
+    this.editor.createAssets([
+      {
+        id: assetId,
+        type: 'image',
+        typeName: 'asset',
+        props: {
+          name: 'tldraw.png',
+          src: image,
+          w: width,
+          h: height,
+          mimeType: 'image/png',
+          isAnimated: false,
+        },
+        meta: {},
+      },
+    ]);
+
+    this.editor.createShape({
+			type: 'image',
+			// Let's center the image in the editor
+			x: currentPagePoint.x - width / 2,
+			y: currentPagePoint.y - height / 2,
+			props: {
+				assetId,
+				w: width,
+				h: height,
+			},
+		});
+
+    this.editor.setCurrentTool('select');
+	}
+}
+
+export const CustomActionsMenu = track(() => {
+  const editor = useEditor();
+	return (
+		<div style={{ backgroundColor: 'thistle' }}>
+			<DefaultActionsMenu>
+				<div style={{ backgroundColor: 'thistle' }}>
+					<TldrawUiMenuItem
+						id="hockey"
+						label="Like my posts"
+						icon="external-link"
+						readonlyOk
+						onSelect={() => {
+              editor.setCurrentTool('hockeyrink');
+						}}
+					/>
+				</div>
+				<div style={{ backgroundColor: 'thistle' }}>
+					<TldrawUiMenuItem
+						id="half"
+						label="Like my posts"
+						icon="external-link"
+						readonlyOk
+						onSelect={() => {
+              editor.setCurrentTool('halfrink');
+						}}
+					/>
+				</div>
+				<DefaultActionsMenuContent />
+			</DefaultActionsMenu>
+		</div>
+	)
+});
+
+const components: TLComponents = {
+	ActionsMenu: CustomActionsMenu,
+}
+
+const tools = [HockeyRinkTool, HalfRinkTool];
+
 export default function App() {
   return (
     <>
-      <select
-        name="image"
-        // value={selected}
-        onChange={(e) => {
-          let data = e.currentTarget.value.split(',');
-          selected = data[0];
-          selected_x = parseInt(data[1]);
-          selected_y = parseInt(data[2]);
-          console.log(selected + " " + selected_x + " " + selected_y);
-        }}
-        className='z-50'
-      >
-        {/* <option value="">Select a templet</option> */}
-        <option value="https://placehold.co/1000x1000.png,1000,1000">Full rink</option>
-        <option value="https://placehold.co/1000x500.png,1000,500">Half rink</option>
-        <option value="https://placehold.co/375x150.png,375,150">Goal zone</option>
-      </select>
-      
     <div className="h-full">
-      <Tldraw tools={tools} initialState='hockeyrink' />
+      <Tldraw tools={tools} components={components} />
     </div>
       </>
   );
