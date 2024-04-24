@@ -248,7 +248,7 @@ class LeftHalfRinkTool extends StateNode {
     this.editor.setCurrentTool('select');
 	}
 }
-export const CustomActionsMenu = track(() => {
+const CustomActionsMenu = track(() => {
   const editor = useEditor();
 	return (
 		
