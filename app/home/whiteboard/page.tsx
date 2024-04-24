@@ -2,11 +2,62 @@
 
 
 
-import { AssetRecordType, DefaultActionsMenu, DefaultActionsMenuContent, StateNode, TLComponents, Tldraw, TldrawUiMenuItem, track, useEditor } from '@tldraw/tldraw'
+import { AssetRecordType, DefaultActionsMenu, StateNode, TLComponents, Tldraw, TldrawUiMenuItem, track, useEditor } from '@tldraw/tldraw'
 import './index.css'
 import React from 'react'
 
 class HockeyRinkTool extends StateNode {
+  static override id = "hockeyrink";
+
+  // This happens when the cursor enters the editor of TlDraw
+	override onEnter = () => {
+		this.editor.setCursor({ type: 'cross', rotation: 0 })
+	}
+
+  // This happens when the user clicks on the editor
+	override onPointerDown = () => {
+		const { currentPagePoint } = this.editor.inputs
+    const assetId = AssetRecordType.createId();
+    const image = "/Rink_Horizontal_Color.jpg"; // You could also use a base64 encoded string here;
+    const width = 1000;
+    const height = 1000;
+    
+    this.editor.createAssets([
+      {
+        id: assetId,
+        type: 'image',
+        typeName: 'asset',
+        props: {
+          name: 'tldraw.png',
+          src: image,
+          w: width,
+          h: height,
+          mimeType: 'image/png',
+          isAnimated: false,
+        },
+        meta: {},
+      },
+    ]);
+
+    // We thought we didn't need this, we do.
+    this.editor.createShape({
+			type: 'image',
+			// Let's center the image in the editor
+			x: currentPagePoint.x - width / 2,
+			y: currentPagePoint.y - height / 2,
+			props: {
+				assetId,
+				w: width,
+				h: height,
+			},
+		});
+
+    // We want to reset the tool to the select tool so we don't place multiple rinks
+    this.editor.setCurrentTool('select');
+	}
+}
+
+class VerticalHockeyRinkTool extends StateNode {
   static override id = "hockeyrink";
 
   // This happens when the cursor enters the editor of TlDraw
@@ -206,10 +257,10 @@ export const CustomActionsMenu = track(() => {
 					<TldrawUiMenuItem
 						id="hockey"
 						label="Hockey Rink"
-						icon="external-link"
+						icon="align-center-horizontal"
 						readonlyOk
 						onSelect={() => {
-              editor.setCurrentTool('hockeyrink');
+              editor.setCurrentTool("hockeyrink");
 						}}
 					/>
 				</div>
@@ -217,11 +268,23 @@ export const CustomActionsMenu = track(() => {
         <div>
 					<TldrawUiMenuItem
 						id="half"
-						label="half Rink"
-						icon="external-link"
+						label="Right Half Rink"
+						icon="align-center-right"
 						readonlyOk
 						onSelect={() => {
               editor.setCurrentTool('halfrink');
+						}}
+					/>
+				</div>
+
+        <div>
+					<TldrawUiMenuItem
+						id="Goal"
+						label="Left Half rink"
+						icon="geo-arrow-left"
+						readonlyOk
+						onSelect={() => {
+              editor.setCurrentTool('lefthalfrink');
 						}}
 					/>
 				</div>
@@ -230,7 +293,7 @@ export const CustomActionsMenu = track(() => {
 					<TldrawUiMenuItem
 						id="Goal"
 						label="Goal Zone"
-						icon="external-link"
+						icon="align-center-left"
 						readonlyOk
 						onSelect={() => {
               editor.setCurrentTool('Goalzone');
@@ -239,17 +302,7 @@ export const CustomActionsMenu = track(() => {
 				</div>
 
         
-				<div>
-					<TldrawUiMenuItem
-						id="Goal"
-						label="Left Half rink"
-						icon="external-link"
-						readonlyOk
-						onSelect={() => {
-              editor.setCurrentTool('lefthalfrink');
-						}}
-					/>
-				</div>
+				
 
 				
 			</DefaultActionsMenu>
