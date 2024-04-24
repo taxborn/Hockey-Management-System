@@ -25,7 +25,7 @@ export default async function Page() {
         title: event.name,
         start: event.start_date,
         end: event.end_date,
-        extendedProps: { color: event.color, location: event.location, description: event.description },
+        extendedProps: { color: event.color, location: event.location, description: event.description, group: event.groupId },
       };
     }
 

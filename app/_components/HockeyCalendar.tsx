@@ -3,7 +3,7 @@
 import { Modal } from "flowbite";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { create_event, update_event } from "@/lib/manage-event";
+import { create_event, update_event, update_event_metadata } from "@/lib/manage-event";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -84,11 +84,52 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
   // about the event, and allow them to edit it
   const handleEventClick = (arg: EventClickArg) => {
     // Render the modal
-    const modalEl = document.querySelector("#edit-event-modal") as HTMLElement;
+    const modalEl = document.querySelector("#editing-modal") as HTMLElement;
     const modal = new Modal(modalEl);
+    modal.show();
     // Get the form in the modal
-    const form = modalEl.querySelector("form") as HTMLFormElement;
+    const form = modalEl.querySelector("#edit-form") as HTMLFormElement;
+    form.reset();
     // Fill in the form with the event's information
+    form.querySelector("#title")?.setAttribute("value", arg.event.title);
+    form.querySelector("#description")?.setAttribute("value", arg.event.extendedProps.description);
+    // Select the color from the dropdown
+    console.log("color: ", arg.event.extendedProps.color);
+    form.querySelector("option[value=" + arg.event.extendedProps.color + "]")?.setAttribute("selected", "selected");
+    form.querySelector("#location")?.setAttribute("value", arg.event.extendedProps.location);
+    form.querySelector("#start")?.setAttribute("value", arg.event.start?.toISOString() || "");
+    form.querySelector("#end")?.setAttribute("value", arg.event.end?.toISOString() || "");
+    // If the event is an all-day event, check the box
+    form.querySelector("#all-day")?.setAttribute("checked", !arg.event.allDay ? "checked" : "");
+    // Select the group
+    form.querySelector("option[value=" + arg.event.extendedProps.group + "]")?.setAttribute("selected", "selected");
+
+    // Get the close button and the submit button
+    const closeEl = document.querySelector(
+      '[data-modal-hide="editing-modal"]',
+    ) as HTMLElement;
+    const submitButton = document.querySelector(
+      '[type="submit"]',
+    ) as HTMLElement;
+
+    closeEl?.addEventListener("click", () => modal.hide());
+
+    submitButton?.addEventListener("click", (clickEvent) => {
+      // If the form is not valid, don't do anything
+      if (!modalEl?.querySelector("form")?.checkValidity()) return;
+
+      // Prevent the form from submitting, we'll handle it ourselves
+      clickEvent.preventDefault();
+
+      const formData = new FormData(
+        modalEl!.querySelector("form") as HTMLFormElement,
+      );
+
+      update_event_metadata(formData);
+
+      modal.hide();
+      // Clear the form
+    });
   };
 
   // Since this only will change the event's dates, we don't need to worry about the other columns
@@ -106,7 +147,7 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
       {/* Only render if the user is not a player role */}
       {/* {role != "Player" ? <CreateEventModal groups={groups} /> : null} */}
       <CreateEventModal groups={groups} />
-      <EditEventModal groups={groups} event={null} />
+      <EditEventModal groups={groups} />
 
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

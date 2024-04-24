@@ -19,12 +19,13 @@ export default function CreateEventModal({ groups }: Props) {
         '[data-modal-hide="authentication-modal"]',
       ) as HTMLElement;
       const submitButton = document.querySelector(
-        '[type="submit"]',
+        '#create-submit',
       ) as HTMLElement;
       const modalEl = document.querySelector(
         "#authentication-modal",
       ) as HTMLElement;
       const modal = new Modal(modalEl);
+      const form = modalEl?.querySelector("#create-form") as HTMLFormElement;
 
       modal.show();
 
@@ -34,18 +35,18 @@ export default function CreateEventModal({ groups }: Props) {
 
       submitButton?.addEventListener("click", (clickEvent) => {
         // If the form is not valid, don't do anything
-        if (!modalEl?.querySelector("form")?.checkValidity()) return;
+        if (form.checkValidity()) return;
 
         // Prevent the form from submitting, we'll handle it ourselves
         clickEvent.preventDefault();
 
-        const event = create_event(
-          new FormData(modalEl!.querySelector("form") as HTMLFormElement),
+        create_event(
+          new FormData(form),
         );
 
         modal.hide();
         // Clear the form
-        modalEl.querySelector("form")?.reset();
+        form.reset();
 
         // Remove the div with the attribute modal-backgrop
         const modalBackdrop = document.querySelector(
@@ -120,7 +121,7 @@ export default function CreateEventModal({ groups }: Props) {
             </div>
 
             <div className="p-4 md:p-5">
-              <form className="space-y-4">
+              <form className="space-y-4" id="create-form">
                 <div>
                   <label
                     htmlFor="title"
@@ -262,6 +263,7 @@ export default function CreateEventModal({ groups }: Props) {
 
                 <button
                   type="submit"
+                  id="create-submit"
                   className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Create Event
