@@ -3,7 +3,7 @@
 import { Modal } from "flowbite";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { create_event as create_calendar_event, update_event } from "@/lib/manage-event";
+import { create_event, update_event } from "@/lib/manage-event";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -16,6 +16,7 @@ import {
 } from "@fullcalendar/core/index.js";
 import CreateEventModal from "./CreateEventModal";
 import { UserGroups } from "@prisma/client";
+import EditEventModal from "./EditEventModal";
 
 interface Props {
   events: EventInput[];
@@ -63,7 +64,7 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
       );
       // TODO: Instead of refreshing the page, we should add the event to the calendar
       // and close the modal
-      const event = create_calendar_event(formData);
+      create_event(formData);
 
       modal.hide();
       // Clear the form
@@ -82,7 +83,12 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
   // TODO: When a user clicks an event, we should show a modal with more information
   // about the event, and allow them to edit it
   const handleEventClick = (arg: EventClickArg) => {
-    console.log(arg);
+    // Render the modal
+    const modalEl = document.querySelector("#edit-event-modal") as HTMLElement;
+    const modal = new Modal(modalEl);
+    // Get the form in the modal
+    const form = modalEl.querySelector("form") as HTMLFormElement;
+    // Fill in the form with the event's information
   };
 
   // Since this only will change the event's dates, we don't need to worry about the other columns
@@ -93,13 +99,14 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
     const id = event.id;
 
     update_event(id, start, event.allDay ? null : end);
-    console.log("Updated event.");
   }
 
   return (
     <>
       {/* Only render if the user is not a player role */}
-      {role != "Player" ? <CreateEventModal groups={groups} /> : null}
+      {/* {role != "Player" ? <CreateEventModal groups={groups} /> : null} */}
+      <CreateEventModal groups={groups} />
+      <EditEventModal groups={groups} event={null} />
 
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -135,9 +142,11 @@ function renderEventContent(eventInfo: EventContentArg) {
   const colorClass = colorMap[color] || "bg-gray-200";
 
   return (
-    <div className={`${colorClass} h-full`}>
-      <b className="mr-2 text-black">{eventInfo.timeText}</b>
-      <p className="inline-block text-black">{eventInfo.event.title}</p>
+    <div className={`${colorClass} h-full text-wrap p-1`}>
+      {eventInfo.timeText && <><i className="mr-2 text-black">{eventInfo.timeText}</i><br /></>}
+
+      <p className="inline-block text-black">{eventInfo.event.title} {eventInfo.event.extendedProps.location && <i>({eventInfo.event.extendedProps.location})</i>}</p>
+      
     </div>
   );
 }

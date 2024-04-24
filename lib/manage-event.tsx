@@ -20,7 +20,7 @@ export async function create_event(formData: FormData) {
   });
   const organizerId = dbUser?.id || 1; // Default to 1 if the user isn't in the database
 
-  const event = await prisma.events.create({
+  await prisma.events.create({
     data: {
       name,
       description,
@@ -38,19 +38,16 @@ export async function create_event(formData: FormData) {
       groupId: group !== "everyone" ? parseInt(group) : null,
     },
   });
-
-  // Return the event so we can use it in the front-end
-  return event;
 }
 
 export async function update_event(id: string, start: string, end: string | null) {
-  const event = await prisma.events.update({
+  await prisma.events.update({
     where: { id: parseInt(id) },
     data: {
+      // If we don't have an end date, we know this is an all-day event and we need to add a day to the start date
+      // to make sure it is on the correct day.
       start_date: new Date(new Date(start).getTime() + (end ? 0 : MILLISECONDS_IN_A_DAY)),
       end_date: end ? new Date(end) : null,
     },
   });
-
-  return event;
 }
