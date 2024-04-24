@@ -3,11 +3,13 @@
 import { Modal } from "flowbite";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { create_event as create_calendar_event } from "@/lib/create-event";
+import { create_event as create_calendar_event, update_event } from "@/lib/manage-event";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import {
+  EventChangeArg,
   EventClickArg,
   EventContentArg,
   EventInput,
@@ -83,19 +85,36 @@ export default function HockeyCalendar({ events, role, groups }: Props) {
     console.log(arg);
   };
 
+  // Since this only will change the event's dates, we don't need to worry about the other columns
+  const handleEventChange = (arg: EventChangeArg) => {
+    const event = arg.event;
+    const start = event.startStr;
+    const end = event.endStr;
+    const id = event.id;
+
+    update_event(id, start, event.allDay ? null : end);
+    console.log("Updated event.");
+  }
+
   return (
     <>
       {/* Only render if the user is not a player role */}
       {role != "Player" ? <CreateEventModal groups={groups} /> : null}
 
       <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }}
         initialView="dayGridMonth"
         editable={true}
         events={events}
         eventContent={renderEventContent}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
+        eventChange={handleEventChange}
         eventOrderStrict={true}
       />
     </>
@@ -116,7 +135,7 @@ function renderEventContent(eventInfo: EventContentArg) {
   const colorClass = colorMap[color] || "bg-gray-200";
 
   return (
-    <div className={colorClass}>
+    <div className={`${colorClass} h-full`}>
       <b className="mr-2 text-black">{eventInfo.timeText}</b>
       <p className="inline-block text-black">{eventInfo.event.title}</p>
     </div>

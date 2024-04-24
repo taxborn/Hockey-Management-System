@@ -3,6 +3,8 @@
 import { currentUser } from "@clerk/nextjs";
 import prisma from "./turso";
 
+const MILLISECONDS_IN_A_DAY = 60 * 60 * 24 * 1000;
+
 export async function create_event(formData: FormData) {
   const name = formData.get("title") as string;
   const description = formData.get("description") as string;
@@ -17,7 +19,6 @@ export async function create_event(formData: FormData) {
     where: { clerkId: (await currentUser())?.id },
   });
   const organizerId = dbUser?.id || 1; // Default to 1 if the user isn't in the database
-  const MILLISECONDS_IN_A_DAY = 60 * 60 * 24 * 1000;
 
   const event = await prisma.events.create({
     data: {
@@ -39,5 +40,17 @@ export async function create_event(formData: FormData) {
   });
 
   // Return the event so we can use it in the front-end
+  return event;
+}
+
+export async function update_event(id: string, start: string, end: string | null) {
+  const event = await prisma.events.update({
+    where: { id: parseInt(id) },
+    data: {
+      start_date: new Date(new Date(start).getTime() + (end ? 0 : MILLISECONDS_IN_A_DAY)),
+      end_date: end ? new Date(end) : null,
+    },
+  });
+
   return event;
 }

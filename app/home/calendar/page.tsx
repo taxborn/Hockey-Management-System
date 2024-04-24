@@ -21,6 +21,7 @@ export default async function Page() {
     // If we have an end date, we know this isn't an all-day event
     if (event.end_date != null) {
       return {
+        id: "" + event.id,
         title: event.name,
         start: event.start_date,
         end: event.end_date,
@@ -30,6 +31,7 @@ export default async function Page() {
 
     // Otherwise, this is a single-day event
     return {
+      id: "" + event.id,
       title: event.name,
       date: event.start_date,
       allDay: true,

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { create_event } from "@/lib/create-event";
+import { create_event } from "@/lib/manage-event";
 import { Modal } from "flowbite";
 import { UserGroups } from "@prisma/client";
 
