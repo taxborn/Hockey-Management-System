@@ -18,7 +18,7 @@ class HockeyRinkTool extends StateNode {
 	override onPointerDown = () => {
 		const { currentPagePoint } = this.editor.inputs
     const assetId = AssetRecordType.createId();
-    const image = "https://placehold.co/1000x1000.png"; // You could also use a base64 encoded string here;
+    const image = "/Rink_Horizontal_Color.jpg"; // You could also use a base64 encoded string here;
     const width = 1000;
     const height = 1000;
     
@@ -67,9 +67,9 @@ class HalfRinkTool extends StateNode {
 	override onPointerDown = () => {
 		const { currentPagePoint } = this.editor.inputs
     const assetId = AssetRecordType.createId();
-    const image = "https://placehold.co/1000x500.png"; // You could also use a base64 encoded string here;
+    const image = "/Rink_Half-Ice-Right_Color.jpg"; // You could also use a base64 encoded string here;
     const width = 1000;
-    const height = 500;
+    const height = 1000;
     
     this.editor.createAssets([
       {
@@ -104,15 +104,108 @@ class HalfRinkTool extends StateNode {
 	}
 }
 
+class GoalzoneTool extends StateNode {
+  static override id = "Goalzone";
+
+	override onEnter = () => {
+		this.editor.setCursor({ type: 'cross', rotation: 0 })
+	}
+
+	override onPointerDown = () => {
+		const { currentPagePoint } = this.editor.inputs
+    const assetId = AssetRecordType.createId();
+    const image = "/Rink_End-Zone-Left_Color.jpg"; // You could also use a base64 encoded string here;
+    const width = 1000;
+    const height = 1000;
+    
+    this.editor.createAssets([
+      {
+        id: assetId,
+        type: 'image',
+        typeName: 'asset',
+        props: {
+          name: 'tldraw.png',
+          src: image,
+          w: width,
+          h: height,
+          mimeType: 'image/png',
+          isAnimated: false,
+        },
+        meta: {},
+      },
+    ]);
+
+    this.editor.createShape({
+			type: 'image',
+			// Let's center the image in the editor
+			x: currentPagePoint.x - width / 2,
+			y: currentPagePoint.y - height / 2,
+			props: {
+				assetId,
+				w: width,
+				h: height,
+			},
+		});
+
+    this.editor.setCurrentTool('select');
+	}
+}
+
+class LeftHalfRinkTool extends StateNode {
+  static override id = "lefthalfrink";
+
+	override onEnter = () => {
+		this.editor.setCursor({ type: 'cross', rotation: 0 })
+	}
+
+	override onPointerDown = () => {
+		const { currentPagePoint } = this.editor.inputs
+    const assetId = AssetRecordType.createId();
+    const image = "/Rink_Half-Ice-Left_Color.jpg"; // You could also use a base64 encoded string here;
+    const width = 1000;
+    const height = 1000;
+    
+    this.editor.createAssets([
+      {
+        id: assetId,
+        type: 'image',
+        typeName: 'asset',
+        props: {
+          name: 'tldraw.png',
+          src: image,
+          w: width,
+          h: height,
+          mimeType: 'image/png',
+          isAnimated: false,
+        },
+        meta: {},
+      },
+    ]);
+
+    this.editor.createShape({
+			type: 'image',
+			// Let's center the image in the editor
+			x: currentPagePoint.x - width / 2,
+			y: currentPagePoint.y - height / 2,
+			props: {
+				assetId,
+				w: width,
+				h: height,
+			},
+		});
+
+    this.editor.setCurrentTool('select');
+	}
+}
 export const CustomActionsMenu = track(() => {
   const editor = useEditor();
 	return (
-		<div style={{ backgroundColor: 'thistle' }}>
+		
 			<DefaultActionsMenu>
-				<div style={{ backgroundColor: 'thistle' }}>
+				<div>
 					<TldrawUiMenuItem
 						id="hockey"
-						label="Full Hockey Rink"
+						label="Hockey Rink"
 						icon="external-link"
 						readonlyOk
 						onSelect={() => {
@@ -121,10 +214,10 @@ export const CustomActionsMenu = track(() => {
 					/>
 				</div>
 
-				<div style={{ backgroundColor: 'thistle' }}>
+        <div>
 					<TldrawUiMenuItem
 						id="half"
-						label="Half Hockey Rink"
+						label="half Rink"
 						icon="external-link"
 						readonlyOk
 						onSelect={() => {
@@ -132,9 +225,35 @@ export const CustomActionsMenu = track(() => {
 						}}
 					/>
 				</div>
-				<DefaultActionsMenuContent />
+
+				<div >
+					<TldrawUiMenuItem
+						id="Goal"
+						label="Goal Zone"
+						icon="external-link"
+						readonlyOk
+						onSelect={() => {
+              editor.setCurrentTool('Goalzone');
+						}}
+					/>
+				</div>
+
+        
+				<div>
+					<TldrawUiMenuItem
+						id="Goal"
+						label="Left Half rink"
+						icon="external-link"
+						readonlyOk
+						onSelect={() => {
+              editor.setCurrentTool('lefthalfrink');
+						}}
+					/>
+				</div>
+
+				
 			</DefaultActionsMenu>
-		</div>
+
 	)
 });
 
@@ -142,7 +261,7 @@ const components: TLComponents = {
 	ActionsMenu: CustomActionsMenu,
 }
 
-const tools = [HockeyRinkTool, HalfRinkTool];
+const tools = [HockeyRinkTool, HalfRinkTool, GoalzoneTool, LeftHalfRinkTool];
 
 export default function App() {
   return (
