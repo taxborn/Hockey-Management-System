@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
-import { useAuth } from "@clerk/nextjs";
 import { Users } from "@prisma/client";
-import { randomBytes } from "crypto";
 
 type Chat = {
   sender: Users;
