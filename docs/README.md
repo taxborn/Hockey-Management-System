@@ -13,6 +13,7 @@ We provide lots of documentation in this folder. In order to get the application
 7. [Calendar](./calendar.md)
 8. [Messaging](./messaging.md)
 9. [Whiteboard and Planning Tool](./whiteboard.md)
+10. [FrontEnd and Styling](./frontend.md)
 
 ## Internal documentation
 
