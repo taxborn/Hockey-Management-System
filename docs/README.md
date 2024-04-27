@@ -7,13 +7,12 @@ We provide lots of documentation in this folder. In order to get the application
 1. [The Database](./database.md)
 2. [Users and Authentiation](./authentication.md)
 3. [Hosting and Deployment](./hosting.md)
-4. [Testing](./testing.md)
-5. [Etc.](./etc.md)
-6. [Administrative Docs](./admin.md)
-7. [Calendar](./calendar.md)
-8. [Messaging](./messaging.md)
-9. [Whiteboard and Planning Tool](./whiteboard.md)
-10. [FrontEnd and Styling](./frontend.md)
+4. [Etc.](./etc.md)
+5. [Administrative Docs](./admin.md)
+6. [Calendar](./calendar.md)
+7. [Messaging](./messaging.md)
+8. [Whiteboard and Planning Tool](./whiteboard.md)
+9. [FrontEnd and Styling](./frontend.md)
 
 ## Internal documentation
 

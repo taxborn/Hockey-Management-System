@@ -1,0 +1,2 @@
+# Extra functionality
+There are extra functions in the `/lib` folder that supports actions for creating chats, events, groups, etc. The functionality from app/api should be moved here for better security.
