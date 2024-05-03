@@ -15,3 +15,6 @@ There are two ways we can interact with Clerk.
 
 We use **#1** to quickly get user information and verifying authentication.
 Method **#2** uses [Clerk's Backend API](https://clerk.com/docs/reference/backend-api) in order to get information on all users through an API.
+
+## TODO here
+- [ ] Additional work can be used to hook in the role system into Clerk. This might be able to be replaced with the organizations/roles in Clerk
