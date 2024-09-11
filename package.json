@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^0.38.4",
-    "@clerk/nextjs": "^4.29.5",
+    "@clerk/nextjs": "^5.5.2",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/daygrid": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.10",
